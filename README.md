@@ -18,4 +18,4 @@ Golf Database on sovellus, joka tarjoaa mahdollisuuden hallita golfpelaajien tie
 - Sovelluksen sulkeminen tallentaa kaikki muutokset automaattisesti.
 
 ## Muuta
-  -Sovellus on valmistusvaiheessa ja etenee koulutyönä kurssin edetessä. Siksi siinä voi vielä esiintyä epäjohdonmukaisuuksia tai bugeja. Nämä korjataan ajan myötä.
+  - Sovellus on valmistusvaiheessa ja etenee koulutyönä kurssin edetessä. Siksi siinä voi vielä esiintyä epäjohdonmukaisuuksia tai bugeja. Nämä korjataan ajan myötä.
