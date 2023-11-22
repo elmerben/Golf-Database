@@ -68,7 +68,6 @@
           <items>
             <MenuItem mnemonicParsing="false" onAction="#handleLisaaTulos" text="Lisää tulos" />
             <MenuItem mnemonicParsing="false" onAction="#handleLisaaPelaaja" text="Lisää pelaaja" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleLisaaKentta" text="Lisää kenttä" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Hae pelaajaa" />
             <MenuItem mnemonicParsing="false" text="Hae pelitulosta" />
@@ -184,9 +183,9 @@
             </ButtonBar>
         <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Button layoutX="120.0" layoutY="1.0" mnemonicParsing="false" onAction="#handleLisaaKentta" onKeyPressed="#keyPressed" prefHeight="25.0" prefWidth="102.0" text="Lisää kenttä" />
                   <Button layoutY="1.0" mnemonicParsing="false" onAction="#handleLisaaPelaaja" prefHeight="25.0" prefWidth="114.0" text="Lisää pelaaja" />
-                  <Button layoutX="230.0" layoutY="1.0" mnemonicParsing="false" onAction="#handleTallenna" prefHeight="25.0" prefWidth="102.0" text="Tallenna" />
+                  <Button layoutX="121.0" layoutY="1.0" mnemonicParsing="false" onAction="#handleTallenna" prefHeight="25.0" prefWidth="102.0" text="Tallenna" />
+                  <Button fx:id="poistaJasen" layoutX="230.0" layoutY="1.0" mnemonicParsing="false" onAction="#handlePoista" prefHeight="25.0" prefWidth="102.0" text="Poista" />
                </children></Pane>
       </children>
       <padding>

@@ -52,16 +52,27 @@ public class Klubben {
     
     
     public void lataa() throws SailoException {
-//        jasenet = new Jasenet();
-//        kierrokset = new Kierrokset();
-        jasenet.lueTiedostosta(hakemisto);
-        kierrokset.lueTiedostosta(hakemisto);
+        jasenet = new Jasenet();
+        kierrokset = new Kierrokset();
+        jasenet.lueTiedostosta();
+        kierrokset.lueTiedostosta();
+    }
+    
+    
+    
+    public void poistaJasen(Jasen poistettavaJasen) throws SailoException {
+        if (poistettavaJasen == null) return;
+        
+        boolean poistettu = jasenet.poista(poistettavaJasen);
+        if (!poistettu) throw new SailoException("Jäsenen poisto epäonnistui");
+        jasenet.tallenna();
+        
     }
     
     
     public void lueTiedostosta(String nimi) throws SailoException {
-//        File dir = new File(nimi);
-//        dir.mkdir();
+        File dir = new File(nimi);
+        dir.mkdir();
         jasenet = new Jasenet();
         kierrokset = new Kierrokset();
         
@@ -80,7 +91,7 @@ public class Klubben {
         } catch (SailoException ex) {
             virhe = ex.getMessage();
         }
-        try {
+        try {            
             kierrokset.tallenna();
         } catch (SailoException ex) {
             virhe = ex.getMessage();
@@ -89,39 +100,20 @@ public class Klubben {
         
     }
     
-//    public void lataa() throws SailoException {
-//        jasenet = new Jasenet();
-//         kierrokset = new Kierrokset();
-//        jasenet.lueTiedostosta(hakemisto);
-//        kierrokset.lueTiedostosta(hakemisto);
-//    }
 
     
     
     public static void main(String[] args) {
         Klubben klubben = new Klubben();
         
-        
         try {
-            klubben.lueTiedostosta("data");
+            klubben.lataa();
+            
+            
         } catch (SailoException ex) {
             System.out.println(ex.getMessage());
         }
-
-        
-        Jasen aku = new Jasen();
-        Jasen aku2 = new Jasen();
-        aku.rekisteroi();
-        aku2.rekisteroi();
-        
-        aku.taytaOletusTiedoilla();
-        aku2.taytaOletusTiedoilla();
-        
-        
-        
         try {
-            klubben.lisaa(aku);
-            klubben.lisaa(aku2);
             
             for (int i = 0; i < klubben.getJasenia(); i++) {
                 Jasen jasen = klubben.annaJasen(i);

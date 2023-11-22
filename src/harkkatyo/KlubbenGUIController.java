@@ -72,8 +72,10 @@ public class KlubbenGUIController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
+        klubben = new Klubben();
         alusta();
-        naytaJasen();
+        lueTiedosto(kerhonnimi);
+        hae(0);
     }
 
     
@@ -99,9 +101,14 @@ public class KlubbenGUIController implements Initializable {
     
     @FXML
     void handleLisaaPelaaja() {
-        uusiPelaaja();
-
+        uusiPelaaja(); 
     }
+    
+    @FXML
+    void handlePoista(ActionEvent event) {
+        poistaJasen();      
+    }
+    
     @FXML
     void handleLisaaTulos(ActionEvent event) {
         uusiTulos();
@@ -118,6 +125,19 @@ public class KlubbenGUIController implements Initializable {
 //        return true;
 //    }
     
+    
+    private void poistaJasen() {
+        Jasen valittuJasen = chooserJasenet.getSelectedObject();
+        if (valittuJasen == null) return;
+        
+        try {
+            klubben.poistaJasen(valittuJasen);
+        } catch (SailoException e) {
+            e.printStackTrace();
+        }
+        hae(0);
+        
+    }
     
     
     protected void lueTiedosto(String nimi) { // OLI PROTECTED STRING
@@ -272,25 +292,12 @@ public class KlubbenGUIController implements Initializable {
     }
      
     private void hae(int jnro) {
-//        chooserJasenet.clear();
-//        int index = 0;
-//        for (int i = 0; i < klubben.getJasenia(); i++) {
-//            Jasen jasen = klubben.annaJasen(i);
-//            if (jasen.getTunnusNro() == jnro) {
-//                index = i;
-//            }
-//            chooserJasenet.add(jasen.getNimi(), jasen);
-//        }
-//        chooserJasenet.setSelectedIndex(index);
-//            
-//        
-//    }
         chooserJasenet.clear();
          int index = 0;
          for (int i = 0; i < klubben.getJasenia(); i++) {
             Jasen jasen = klubben.annaJasen(i);
             if (jasen.getTunnusNro() == jnro) index = i;
-            chooserJasenet.add(""+jasen.getNimi(), jasen);
+            chooserJasenet.add(jasen.getNimi(), jasen);
          }
             
          chooserJasenet.setSelectedIndex(index);

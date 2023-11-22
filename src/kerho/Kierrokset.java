@@ -17,7 +17,7 @@ public class Kierrokset implements Iterable<Kierros> {
 
     
     
-    private String tiedostonPerusNimi = "";
+    private String tiedostonPerusNimi = "data/kierrokset";
     private boolean muutettu = false;    
     private final Collection<Kierros> alkiot = new ArrayList<Kierros>();
 
@@ -42,7 +42,7 @@ public class Kierrokset implements Iterable<Kierros> {
     }
 
     public String getTiedostonNimi() {
-        return tiedostonPerusNimi+ ".dat";  
+        return tiedostonPerusNimi + ".dat";  
     }
     
     public String setSheesh() {
@@ -58,14 +58,7 @@ public class Kierrokset implements Iterable<Kierros> {
         return alkiot.size();
     }
     
-//    public String getTiedostonPerusNimi() {
-//        return tiedostonNimi + ".dat";
-//    }
-//    
-//    public void setTiedostonNimi(String tied) {
-//        tiedostonNimi = tied;
-//    }
-//
+
     public String getBakNimi() {
         return tiedostonPerusNimi + ".bak";
     }
@@ -89,51 +82,7 @@ public class Kierrokset implements Iterable<Kierros> {
             throw new SailoException("Ongelmia tiedoston kanssa: " + e.getMessage());
         }
 
-//        String nimi = hakemisto + "/kierrokset.dat";
-//        File ftied = new File(nimi);
-//        try (Scanner fi = new Scanner(new FileInputStream(ftied))) {
-//            while (fi.hasNext()) {
-//                String s = fi.nextLine().trim();
-//                if ("".equals(s) || s.charAt(0) == ';') continue;
-//                Kierros kie = new Kierros();
-//                kie.parse(s);
-//                lisaa(kie);
-//            }
-//        } catch (FileNotFoundException e) {
-//            throw new SailoException("Ei saa luettua tiedostoa " + tiedostonNimi);
-//        }
-
-
-        
-//        setTiedostonNimi(hakemisto);
-//        try (BufferedReader fi = new BufferedReader(new FileReader(getTiedostonNimi()))) {
-//            String rivi;
-//            while ((rivi = fi.readLine()) != null) {
-//                rivi = rivi.trim();
-//                if("".equals(rivi) || rivi.charAt(0) == ';') continue;
-//                Kierros kie = new Kierros();
-//                kie.parse(rivi);
-//                lisaa(kie);
-//            }
-//        } catch ( FileNotFoundException e ) {
-//            throw new SailoException("Tiedostoa " + getTiedostonNimi() + " ei saada aukeamaan");
-//        } catch ( IOException e ) {
-//            throw new SailoException("Ongelmia tiedoston kanssa: " + e.getMessage());
-//        }
-
-
-        
-//        File ftied = new File(getTiedostonPerusNimi());
-//        
-//
-//        
-//        
-        
-//        tiedostonNimi = hakemisto + ".rundi";
-//        throw new SailoException("Ei osata vielä lukea tiedostoa " + tiedostonNimi);
-    }
-    
-    
+    }    
     
     public void lueTiedostosta() throws SailoException {
         lueTiedostosta(getTiedostonNimi());
@@ -141,17 +90,7 @@ public class Kierrokset implements Iterable<Kierros> {
     
 
     public void tallenna() throws SailoException {
-        if(!muutettu) return;
-//        File ftied = new File(hakemisto + "/kierrokset.dat");
-//        try (PrintStream fo = new PrintStream(new FileOutputStream(ftied, false))) {
-//                for (var har : alkiot) {
-//                    fo.println(har.toString());
-//                } 
-//        } catch (FileNotFoundException ex) {
-//            throw new SailoException("Tiedoston " + ftied.getAbsolutePath() + " aukaisu ei onnistu. ");
-//        }
-    
-    
+        if(!muutettu) return;   
         File fbak = new File(getBakNimi());
         File ftied = new File(getTiedostonNimi() );// + ".dat"
         fbak.delete();
@@ -192,13 +131,13 @@ public class Kierrokset implements Iterable<Kierros> {
         Kierrokset rundit = new Kierrokset();
         
         try {
-            rundit.lueTiedostosta("kierrokset");
+            rundit.lueTiedostosta();
         } catch (SailoException ex) {
             System.err.println(ex.getMessage());
         }
 
-        
-        
+//        
+//        
         Kierros rundi1 = new Kierros();
         rundi1.vastaaKierros(2);
         Kierros rundi2 = new Kierros();

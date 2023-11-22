@@ -1,4 +1,4 @@
-package harkkatyo;
+ package harkkatyo;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -37,7 +37,7 @@ public class HarkkaMain extends Application {
 
             
             Klubben klubben = new Klubben();
-             klubben.lataa();
+            klubben.lataa();
             KlubbenCtrl.setKerho(klubben);
             // KlubbenCtrl.setKlubben(klubben); 
             primaryStage.show();

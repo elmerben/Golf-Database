@@ -28,6 +28,7 @@ public class Kierros {
     
     public Kierros(int pelaajaNro) {
         this.pelaajaNro = pelaajaNro;
+        rekisteroi();
     }
     
     
@@ -104,22 +105,8 @@ public class Kierros {
             erotin = "|";
         }
         return sb.toString();
-    }
-    
-    
-//    @Override
-//    public String toString() {
-//        return "" + getTunnusNro() +
-//                "|" + pelaajaNro + 
-//                "|" + pvm + 
-//                "|" + kierrostunnus + 
-//                "|" + kenttaID + 
-//                "|" + tulosEtu +
-//                "|" + tulosTaka +
-//                "|" + tulosYht;
-//    }
-    
-    
+    }   
+   
     public void tulosta(PrintStream out) {
         out.println("Paivamaara: " + pvm + " Tulos yht: " + tulosYht);
     }

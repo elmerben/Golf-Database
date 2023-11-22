@@ -21,7 +21,7 @@ public class Jasenet {
     private static final int MAX_JASENIA = 5;
     
     private Jasen[] alkiot;
-    private String tiedostonPerusNimi = "pelaajat";
+    private String tiedostonPerusNimi = "data/pelaajat";
     private boolean muutettu = false;
     private String kokoNimi = "";
     
@@ -30,34 +30,12 @@ public class Jasenet {
 
 
     public static void main(String[] args) {
-        
-
-        
         Jasenet jasenet = new Jasenet();
-        Jasen aku = new Jasen();
-        Jasen aku2 = new Jasen();
-        Jasen aku3 = new Jasen();
-        Jasen aku4 = new Jasen();
-        
         try {
-            jasenet.lueTiedostosta("data");
+            jasenet.lueTiedostosta();
         } catch (SailoException ex) {
             System.err.println(ex.getMessage());
         }
-        
-        aku.rekisteroi();
-        aku.taytaOletusTiedoilla();
-        aku2.rekisteroi();
-        aku2.taytaOletusTiedoilla();
-        aku3.rekisteroi();
-        aku3.taytaOletusTiedoilla();
-        aku4.rekisteroi();
-        aku4.taytaOletusTiedoilla();
-        
-        jasenet.lisaa(aku);
-        jasenet.lisaa(aku2);
-        jasenet.lisaa(aku3);
-        jasenet.lisaa(aku4);
 
         
         try {
@@ -75,13 +53,7 @@ public class Jasenet {
                 
 
     }
-    
-//    public void tallenna(String hakemisto) throws SailoException {
-//        File ftied = new File(hakemisto + "/nimet.dat");
-//        
-//        //
-//    }
-    
+
     
     public void lueTiedostosta() throws SailoException {
         lueTiedostosta(getTiedostonPerusNimi());
@@ -113,42 +85,27 @@ public class Jasenet {
         }
  
 
+        }       
+    
+    public boolean poista(Jasen poistettavaJasen) {
+        if (poistettavaJasen == null) return false;
+        int poisto = -1;
+        for (int i = 0; i < lkm; i++) {
+            if(alkiot[i].equals(poistettavaJasen)) {
+                poisto = i;
+                break;
+            }
+        }
+        if (poisto == -1) return false;
+        for (int i = poisto; i < lkm -1; i++) {
+            alkiot[i] = alkiot[i + 1];
         }
         
-        
-//        tiedostonPerusNimi = tied + "/pelaajat.dat";
-//        // String nimi = tiedostonNimi; //__________________________________________
-//        File ftied = new File(tiedostonPerusNimi);
-//        
-//        try (Scanner fi = new Scanner(new FileInputStream(ftied))) {
-//            while ( fi.hasNext() ) {
-//                String s = fi.nextLine();
-//                if (s == null || "".equals(s) || s.charAt(0) == ';') continue;
-//                Jasen jasen = new Jasen();
-//                jasen.parse(s); 
-//                lisaa(jasen);
-//            }
-//            muutettu = false;
-//        } catch ( FileNotFoundException e ) {
-//            throw new SailoException("Ei saa luettua tiedostoa " + tiedostonPerusNimi);
-//        }
-//
-//    }
-
-    
-    
-    
-    //
-    
-//    public Jasen next() throws NoSuchElementException {
-//        if(!hasNext()) throw new NoSuchElementException("Ei ole");
-//        return anna(kohdalla++);
-//    }
-//    
-//    public boolean hasNext() {
-//        return kohdalla < getLkm();
-//    }
-    
+        lkm--;
+        alkiot[lkm] = null;
+        muutettu = true;
+        return true;
+    }
     
     public void talleta() throws SailoException {
         tallenna();
@@ -156,15 +113,16 @@ public class Jasenet {
     
     
     public void tallenna() throws SailoException {
-       // if (!muutettu) return;
+        if (!muutettu) return;
         
         File fbak = new File(getBakNimi());
         File ftied = new File(getTiedostonNimi());
         fbak.delete();
         ftied.renameTo(fbak);
+        
         try (PrintWriter fo = new PrintWriter(new FileWriter(ftied.getCanonicalPath()))) {
             fo.println(getKokoNimi());
-                    fo.println(alkiot.length);
+                    fo.println(lkm);
                     for(int i = 0; i < lkm; i++) {
                         Jasen jasen = anna(i);
                         fo.println(jasen.toString());
