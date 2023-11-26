@@ -17,9 +17,46 @@ public class Kierros {
     private int tulosEtu;
     private int tulosTaka;
     private int tulosYht;
+    private String kenttaLyhenne;
 
     private static int seuraavaNro = 1;
 
+    
+    
+    public void setPelaajaNro(int pelaajaNro) {
+        this.pelaajaNro = pelaajaNro;
+    }
+    
+    public void setPvm(String pvm) {
+        this.pvm = pvm;
+    }
+
+    public void setTulosEtu(int tulosEtu) {
+        this.tulosEtu = tulosEtu;
+        laskeYhteistulos();
+    }
+
+    public void setTulosTaka(int tulosTaka) {
+        this.tulosTaka = tulosTaka;
+        laskeYhteistulos();
+    }
+
+    public void setTulosYht(int tulosYht) {
+        this.tulosYht = tulosYht;
+    }
+    
+    private void laskeYhteistulos() {
+        this.tulosYht = this.tulosEtu + this.tulosTaka;
+    }
+    
+    
+    public void setKenttaLyhenne(String kenttaLyhenne) {
+        if (kenttaLyhenne.length() <= 6) {
+            this.kenttaLyhenne = kenttaLyhenne;
+        } else {
+            this.kenttaLyhenne = kenttaLyhenne.substring(0, 6);
+        }
+    }
     
     
     public Kierros() {
@@ -40,30 +77,17 @@ public class Kierros {
 
     
     public void parse(String rivi) {
+        
+        
         StringBuffer sb = new StringBuffer(rivi);
-        setTunnusNro(Mjonot.erota(sb, '|', getTunnusNro()));
-        pelaajaNro = Mjonot.erota(sb, '|', pelaajaNro);
         pvm = Mjonot.erota(sb, '|', pvm);
-        kierrostunnus = Mjonot.erota(sb, '|', kierrostunnus);
-        kenttaID = Mjonot.erota(sb, '|', kenttaID);
+        kenttaLyhenne = Mjonot.erota(sb, '|', kenttaLyhenne);
         tulosEtu = Mjonot.erota(sb, '|', tulosEtu);
         tulosTaka = Mjonot.erota(sb, '|', tulosTaka);
         tulosYht = Mjonot.erota(sb, '|', tulosYht);
-
-
+        pelaajaNro = Mjonot.erota(sb, '|', pelaajaNro);
     }
 
-    
-    public void vastaaKierros(int nro) {
-        pelaajaNro = nro;
-        pvm = (rand(1, 30) + "." + rand(1, 12)+ "." + rand(1900, 2100));
-        kierrostunnus = rand(1, 1000);
-        kenttaID = rand(1, 1000);
-        tulosEtu = rand(20, 50);
-        tulosTaka = rand(20, 50);
-        tulosYht = tulosEtu + tulosTaka;
-    }
-    
     
     public int getKenttia() {
         return 5;
@@ -94,21 +118,20 @@ public class Kierros {
     }
     
     
+    
     @Override
     public String toString() {
-        
-        StringBuffer sb = new StringBuffer("");
-        String erotin = "";
-        for (int k = 0; k < getKenttia(); k++) {
-            sb.append(erotin);
-            sb.append(anna(k));
-            erotin = "|";
-        }
-        return sb.toString();
-    }   
-   
+        return  pvm + "|" + kenttaLyhenne + "|" + tulosEtu + "|" + tulosTaka + "|" + tulosYht + "|" + pelaajaNro ;
+    }
+    
+
     public void tulosta(PrintStream out) {
-        out.println("Paivamaara: " + pvm + " Tulos yht: " + tulosYht);
+//        out.println("Paivamaara: " + pvm + " Tulos yht: " + tulosYht);
+        out.println("Päivämäärä: " + pvm);
+        out.println("Kenttä: " + kenttaLyhenne); // Olettaen, että tämä on haluttu kentän nimi
+        out.println("Tulos etu: " + tulosEtu);
+        out.println("Tulos taka: " + tulosTaka);
+        out.println("Tulos yhteensä: " + tulosYht); 
     }
     
     public void tulosta(OutputStream os) {
@@ -134,7 +157,8 @@ public class Kierros {
     
     public static void main(String[] args) {
         Kierros rundi = new Kierros();
-        rundi.vastaaKierros(2);
+        rundi.rekisteroi();
+//        rundi.vastaaKierros(2);
         rundi.tulosta(System.out);
     }
     

@@ -24,7 +24,7 @@ public class Kierrokset implements Iterable<Kierros> {
 
 
     public Kierrokset() {
-        // toistaiseksi ei tarvitse tehdä mitään
+        //
     }
     
     public Kierros anna(int indeksi) {
@@ -42,7 +42,10 @@ public class Kierrokset implements Iterable<Kierros> {
     }
 
     public String getTiedostonNimi() {
-        return tiedostonPerusNimi + ".dat";  
+        if (!tiedostonPerusNimi.endsWith(".dat")) {
+            return tiedostonPerusNimi + ".dat";
+        }
+        return tiedostonPerusNimi;  
     }
     
     public String setSheesh() {
@@ -66,7 +69,6 @@ public class Kierrokset implements Iterable<Kierros> {
     public void lueTiedostosta(String tied) throws SailoException {
         setTiedostonPerusNimi(tied);
         File tiedosto = new File(getTiedostonNimi()); // 
-        /// TÄSSÄ JOTAIN HÄMÄRÄÄ KLUBBENIN KAUTTA TULEE TUPLAT .DAT TÄÄLTÄ EI
         try (BufferedReader fi = new BufferedReader(new FileReader(tiedosto))) {
             String rivi;
             while ((rivi = fi.readLine()) != null) {
@@ -88,11 +90,28 @@ public class Kierrokset implements Iterable<Kierros> {
         lueTiedostosta(getTiedostonNimi());
     }
     
+    
+    public boolean poista(Kierros poistettavaKierros) {
+        if (poistettavaKierros == null) return false;
+        
+        boolean poistettu = false;
+        Iterator<Kierros> iteraattori = alkiot.iterator();
+        while (iteraattori.hasNext()) {
+            Kierros kierros = iteraattori.next();
+            if (kierros.equals(poistettavaKierros)) {
+                iteraattori.remove();
+                poistettu = true;
+                muutettu = true;
+            }
+        }
+        return poistettu;
+    }
+    
 
     public void tallenna() throws SailoException {
         if(!muutettu) return;   
         File fbak = new File(getBakNimi());
-        File ftied = new File(getTiedostonNimi() );// + ".dat"
+        File ftied = new File(getTiedostonNimi() );
         fbak.delete();
         ftied.renameTo(fbak);    
         try (PrintWriter kirjaaja = new PrintWriter(new FileWriter(ftied.getCanonicalPath()))) {
@@ -135,24 +154,9 @@ public class Kierrokset implements Iterable<Kierros> {
         } catch (SailoException ex) {
             System.err.println(ex.getMessage());
         }
-
-//        
-//        
-        Kierros rundi1 = new Kierros();
-        rundi1.vastaaKierros(2);
-        Kierros rundi2 = new Kierros();
-        rundi2.vastaaKierros(1);
-        Kierros rundi3 = new Kierros();
-        rundi3.vastaaKierros(2);
-        Kierros rundi4 = new Kierros();
-        rundi4.vastaaKierros(1);
-
-        rundit.lisaa(rundi1);
-        rundit.lisaa(rundi2);
-        rundit.lisaa(rundi3);
-        rundit.lisaa(rundi2);
-        rundit.lisaa(rundi4);
         
+        Kierros rundi1 = new Kierros();
+        rundit.lisaa(rundi1);    
         
         List<Kierros> kierrokset2 = rundit.annaKierrokset(1);
 

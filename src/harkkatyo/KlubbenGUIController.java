@@ -1,6 +1,9 @@
 package harkkatyo;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
@@ -14,12 +17,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import kerho.Jasen;
 import kerho.Kierros;
 import kerho.Klubben;
 import kerho.SailoException;
 import fi.jyu.mit.fxgui.*;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URL;
 import java.util.List;
@@ -36,7 +41,7 @@ import javafx.event.ActionEvent;
 public class KlubbenGUIController implements Initializable {
 
 
-    private String kerhonnimi = "data"; // OLI PELAAJAREKISTERI 
+    private String kerhonnimi = "data";
     
     @FXML private TitledPane hakuEhto;
     @FXML private TextField hakuKentta;
@@ -76,6 +81,7 @@ public class KlubbenGUIController implements Initializable {
         alusta();
         lueTiedosto(kerhonnimi);
         hae(0);
+        hakuKentta.textProperty().addListener((obs, vanhaArvo, uusiArvo) -> suoritaHaku(uusiArvo));
     }
 
     
@@ -106,7 +112,14 @@ public class KlubbenGUIController implements Initializable {
     
     @FXML
     void handlePoista(ActionEvent event) {
-        poistaJasen();      
+        Jasen valittuJasen = chooserJasenet.getSelectedObject();
+        Kierros valittuKierros = tableKierrokset.getObject();
+
+        if (valittuJasen != null && valittuKierros == null) {
+            poistaJasen(valittuJasen);
+        } else if (valittuKierros != null) {
+            poistaKierros(valittuKierros, valittuJasen);
+        }        
     }
     
     @FXML
@@ -115,19 +128,27 @@ public class KlubbenGUIController implements Initializable {
     }
     
    // _____________________________________________________
-
     
+    private void suoritaHaku(String hakuteksti) {
+        chooserJasenet.clear();
+        for (int i = 0; i < klubben.getJasenia(); i++) {
+            Jasen jasen = klubben.annaJasen(i);
+            if (jasen.getNimi().toLowerCase().contains(hakuteksti.toLowerCase())) {
+                chooserJasenet.add(jasen.getNimi(), jasen);
+            }
+        }
+    }    
     
-//    public boolean avaa() {
-//        String uusinimi = KerhonNimiController.kysyNimi(null,kerhonnimi);
-//        if(uusinimi == null) return false;
-//        lueTiedosto(uusiNimi);
-//        return true;
-//    }
+    private void poistaKierros(Kierros kierros, Jasen valittuJasen) {
+        try {
+            klubben.poistaKierros(kierros); 
+            hae(valittuJasen.getTunnusNro());
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog(e.getMessage());
+        }
+    }
     
-    
-    private void poistaJasen() {
-        Jasen valittuJasen = chooserJasenet.getSelectedObject();
+    private void poistaJasen(Jasen valittuJasen) {
         if (valittuJasen == null) return;
         
         try {
@@ -140,17 +161,12 @@ public class KlubbenGUIController implements Initializable {
     }
     
     
-    protected void lueTiedosto(String nimi) { // OLI PROTECTED STRING
+    protected void lueTiedosto(String nimi) {
         kerhonnimi = nimi;
         try {
             klubben.lueTiedostosta(nimi);
             hae(0);
-           // return null;
         }catch (SailoException e) {
-           // hae(0);
-            // String virhe = e.getMessage();
-           // if(virhe != null) Dialogs.showMessageDialog(virhe);
-            // return virhe;
             Dialogs.showMessageDialog(e.getMessage());
         }
     }
@@ -161,7 +177,6 @@ public class KlubbenGUIController implements Initializable {
     private TextField[] edits;
     
     private void alusta() {
-       // panelJasen.setContent(areaJasen);
         panelJasen.setFitToHeight(true);
         chooserJasenet.clear();
         chooserJasenet.addSelectionListener(e -> naytaJasen());
@@ -174,18 +189,7 @@ public class KlubbenGUIController implements Initializable {
         if (jasen == null) return; 
         
         JasenDialogController.naytaJasen(edits, jasen);
-        naytaKierrokset(jasen);
-        
-
-        
-//        editNimi.setText(jasen.getNimi());
-//        editHcp.setText(String.format("%.2f", jasen.getHcp()));
-     // editSeura.setText(jasen.getSeura());
-       // naytaKierrokset(jasen); // WTF
-
-        
-        
-        
+        naytaKierrokset(jasen);       
     }
     
     private void muokkaa() {
@@ -194,14 +198,14 @@ public class KlubbenGUIController implements Initializable {
         try {
         jasen = jasen.clone();
         } catch (CloneNotSupportedException e) {
-            // ei voi tapahtua
+            
         }
         jasen = JasenDialogController.kysyJasen(null, jasen);
         if (jasen == null) return;
         try {
         klubben.korvaaTaiLisaa(jasen);
         } catch (SailoException e) {
-            // TODO näytä dialogi
+            //
         }
         hae(jasen.getTunnusNro());
     }
@@ -244,13 +248,26 @@ public class KlubbenGUIController implements Initializable {
     }
 
     public void uusiTulos() {
-        Jasen jasenKohdalla = chooserJasenet.getSelectedObject();
-        if(jasenKohdalla == null) return;
-        Kierros rundi = new Kierros();
-        rundi.rekisteroi();
-        rundi.vastaaKierros(jasenKohdalla.getTunnusNro()); //KOrvaa dialogilla
-        klubben.lisaa(rundi);
-        hae(jasenKohdalla.getTunnusNro());
+        
+        try {
+            FXMLLoader alusta = new FXMLLoader(getClass().getResource("LisaaTulosGUIView.fxml"));
+            Parent root = alusta.load();
+            
+            Stage stage = new Stage();
+            stage.setTitle("Lisää uusi tulos");
+            stage.setScene(new Scene(root));
+            
+            LisaaTulosGUIController kontrolleri = alusta.getController();
+            kontrolleri.setKlubben(klubben);
+            Jasen valittuJasen = chooserJasenet.getSelectedObject();
+            if (valittuJasen != null) {
+                kontrolleri.setJasen(valittuJasen);
+                stage.showAndWait();
+                hae(valittuJasen.getTunnusNro());
+            }            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     
@@ -267,8 +284,6 @@ public class KlubbenGUIController implements Initializable {
         }
     }
     
-    
-    
     public void uusiPelaaja() {
         Jasen uusi = new Jasen();
         uusi = JasenDialogController.kysyJasen(null, uusi);
@@ -281,10 +296,7 @@ public class KlubbenGUIController implements Initializable {
             return;
         }
         hae(uusi.getTunnusNro());
-        
-
-    }
-    
+    }   
     
     public boolean voikoSulkea() {
         tallenna();
@@ -301,11 +313,7 @@ public class KlubbenGUIController implements Initializable {
          }
             
          chooserJasenet.setSelectedIndex(index);
-        }
-
-
-
-    
+        }    
     
     protected void uusiJasen() {
         Jasen uusi = new Jasen();
@@ -319,10 +327,4 @@ public class KlubbenGUIController implements Initializable {
         }
         hae(uusi.getTunnusNro());
     }
-
-
-
-    
-    
-    
 }

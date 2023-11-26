@@ -14,7 +14,8 @@ public class HcpTarkistus {
         if (!tasoitus.matches(kirjoitusasu)) {
             return "Virheellinen syöte tasoituksessa.";
         }
-        if(tasoitus.charAt(2) != '.') return "Erotinmerkkinä voi olla vain piste.";
+        if (tasoitus.charAt(pituus - 2) != '.') return "Erotinmerkkinä voi olla vain piste.";
+//        if(tasoitus.charAt(2) != '.') return "Erotinmerkkinä voi olla vain piste.";
         double summa = Double.parseDouble(tasoitus);
         if (summa > 54.0) {
             return "Tasoitus liian suuri.";

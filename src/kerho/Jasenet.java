@@ -35,9 +35,7 @@ public class Jasenet {
             jasenet.lueTiedostosta();
         } catch (SailoException ex) {
             System.err.println(ex.getMessage());
-        }
-
-        
+        }        
         try {
             jasenet.tallenna();
         } catch (SailoException e) {
@@ -49,19 +47,13 @@ public class Jasenet {
             System.out.println("Jäsenindeksi: " + i);
             jasen.tulosta(System.out);
         }
-        
-                
-
     }
-
     
     public void lueTiedostosta() throws SailoException {
         lueTiedostosta(getTiedostonPerusNimi());
-    }
+    }    
     
-    
-    public void lueTiedostosta(String tied) throws SailoException {
-        
+    public void lueTiedostosta(String tied) throws SailoException {        
         setTiedostonPerusNimi(tied);
         try (BufferedReader fi = new BufferedReader(new FileReader(getTiedostonNimi()))){
             kokoNimi = fi.readLine();
@@ -73,7 +65,8 @@ public class Jasenet {
                 rivi = rivi.trim();
                 if ( "".equals(rivi) || rivi.charAt(0) == ';' ) continue;
                 Jasen jasen = new Jasen();
-                jasen.parse(rivi); // voisi olla virhekäsittely
+                jasen.parse(rivi);
+                System.out.println("Luettu rivi: " + rivi);
                 lisaa(jasen);
             }
             muutettu = false;
@@ -109,8 +102,7 @@ public class Jasenet {
     
     public void talleta() throws SailoException {
         tallenna();
-    }
-    
+    }    
     
     public void tallenna() throws SailoException {
         if (!muutettu) return;

@@ -60,8 +60,20 @@ public class Klubben {
     
     
     
+    public void poistaKierros(Kierros poistettavaKierros) throws SailoException {
+        if (poistettavaKierros == null) return;
+
+        kierrokset.poista(poistettavaKierros);
+        kierrokset.tallenna();
+    }
+    
     public void poistaJasen(Jasen poistettavaJasen) throws SailoException {
         if (poistettavaJasen == null) return;
+        
+        List<Kierros> kierrokset = annaKierrokset(poistettavaJasen);
+        for (Kierros kierros : kierrokset) {
+            this.kierrokset.poista(kierros);
+        }
         
         boolean poistettu = jasenet.poista(poistettavaJasen);
         if (!poistettu) throw new SailoException("Jäsenen poisto epäonnistui");
@@ -128,6 +140,7 @@ public class Klubben {
         
 
         }
+
 
         
 

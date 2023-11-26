@@ -16,11 +16,10 @@ import kanta.tunnusTarkistus;
 public class Jasen implements Cloneable {
 
     
-    // | 007        | Bond, James         | LPG        | 42,3    |
     private int     tunnusNro;
     private String  nimi        = "";
     private String  kotiseura   = "";
-    private double tasoitus    = 0.0;
+    private String tasoitus    = "0.0";
     
     private static int seuraavaNro = 1;
     
@@ -34,8 +33,7 @@ public class Jasen implements Cloneable {
     }
     public String setNimi(String s) { // WTF
         nimi = s;
-        return null;
-        
+        return null;        
     }
 
     public boolean equals(Jasen jasen) {
@@ -43,15 +41,12 @@ public class Jasen implements Cloneable {
         for (int k = 0; k < getKenttia(); k++)
             if ( !anna(k).equals(jasen.anna(k)) ) return false;
         return true;
-    }
-
-    
+    }    
     
     @Override
     public boolean equals(Object jasen) {
         if ( jasen instanceof Jasen ) return equals((Jasen)jasen);
         return false;
-
     }
     
     public String getNimi() {
@@ -77,13 +72,11 @@ public class Jasen implements Cloneable {
         case 0: return "" + tunnusNro;
         case 1: return "" + nimi;
         case 2: return "" + kotiseura;
-        case 3: return Double.toString(tasoitus);
+        case 3: return tasoitus;
         default: return "Ääliö";
 
         }
     }
-    
-
     
     private HcpTarkistus tasurit = new HcpTarkistus();
     
@@ -101,9 +94,9 @@ public class Jasen implements Cloneable {
             kotiseura = tjono;
             return null;
         case 3: 
-            String virhe = tasurit.tarkista(Double.toString(tasoitus));
+            String virhe = tasurit.tarkista(tjono);
             if (virhe != null) return virhe;
-            tasoitus = Double.parseDouble(tjono);
+            tasoitus = tjono;
             return null;
         default:
             return "Virhe indeksin kanssa.";
@@ -135,15 +128,7 @@ public class Jasen implements Cloneable {
             erotin = "|";
         }
         return sb.toString();
-        
-//        return "" + 
-//                getTunnusNro() + "|" +
-//                nimi + "|" +
-//                kotiseura + "|" +
-//                tasoitus + "|";
     }
-    
-    
     
     /**
      * Palauttaa jäsenen tunnusnumeron.
@@ -151,8 +136,7 @@ public class Jasen implements Cloneable {
      */
     public int getTunnusNro() {
         return this.tunnusNro;
-    }
-    
+    }    
     
     private void setTunnusNro(int nr) {
         tunnusNro = nr;
@@ -178,59 +162,27 @@ public class Jasen implements Cloneable {
         this.tunnusNro = seuraavaNro;
         seuraavaNro++;
         return this.tunnusNro;
-    }
-    
-    
+    }    
     
     public void tulosta(OutputStream os) {
         tulosta(new PrintStream(os));
-    }
-    
-    public void taytaOletusTiedoilla() {
-        nimi = "Ankka Aku " + tunnusTarkistus.rand(1, 100);
-        // tunnusNro = seuraavaNro;
-        tunnusNro = tunnusTarkistus.rand(1, 2000);
-        kotiseura = "LPG ";
-       // tasoitus = tunnusTarkistus.rand2(0.0, 52.0);
-    }
-    
-    
-    
-    
+    }    
+
     public String getSeura() {
         return kotiseura;
     }
     
-    public double getHcp() {
+    public String getHcp() {
         return tasoitus;
-    }
-    
+    }    
 
     public String setHcp(String s) {
         HcpTarkistus tarkistaja = new HcpTarkistus();
         String virhe = tarkistaja.tarkista(s);
         if(virhe!= null) return virhe;
-        double uusiTasoitus = Double.parseDouble(s);
-        tasoitus = uusiTasoitus;
-        
-        
-//        double tasuri = Double.parseDouble(s);
-//        tasoitus = tasuri;
+        tasoitus = s;
         return null;
-
-//        HcpTarkistus tarkistaja = new HcpTarkistus();
-//        String virhe = tarkistaja.tarkista(Double.toString(s));
-//        if(virhe != null) {
-//            return virhe;
-//        } 
-//        this.tasoitus = s;
-        
-        // TÄSSÄ TOIMIVA JOS MENEE SEKAISIN OLI MYÖS RETURN ARVONA DOUBLE
-       //tasoitus = Double.parseDouble(s);
-
-       // return 0;
     }
-
     
     /**
      * @param args ei käytössä
@@ -244,10 +196,6 @@ public class Jasen implements Cloneable {
         aku2.rekisteroi();
         
         aku.tulosta(System.out);
-//
-        aku.taytaOletusTiedoilla();
-        aku2.taytaOletusTiedoilla();
-        
         aku.tulosta(System.out);
         aku2.tulosta(System.out);
 
@@ -260,12 +208,6 @@ public class Jasen implements Cloneable {
         StringBuffer sb = new StringBuffer(rivi);
         for(int k = 0; k < getKenttia(); k++)
             aseta(k, Mjonot.erota(sb, '|'));
-        
-//        var sb = new StringBuilder(rivi);
-//        setTunnusNro(Mjonot.erota(sb, '|', getTunnusNro()));
-//        nimi = Mjonot.erota(sb, '|', nimi);
-//        kotiseura = Mjonot.erota(sb, '|', kotiseura);
-//        tasoitus = Mjonot.erota(sb, '|', tasoitus);
 
     }
 

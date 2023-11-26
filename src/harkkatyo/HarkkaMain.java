@@ -29,31 +29,21 @@ public class HarkkaMain extends Application {
             scene.getStylesheets().add(getClass().getResource("harkka.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.setTitle("Golf-Klubben");
-            primaryStage.show();
-            
+            primaryStage.show();            
             primaryStage.setOnCloseRequest((event) -> {
                 if ( !KlubbenCtrl.voikoSulkea() ) event.consume();
-            });
-
-            
+            });            
             Klubben klubben = new Klubben();
             klubben.lataa();
             KlubbenCtrl.setKerho(klubben);
-            // KlubbenCtrl.setKlubben(klubben); 
             primaryStage.show();
             
             Application.Parameters params = getParameters();
             if(params.getRaw().size() > 0)
                 KlubbenCtrl.lueTiedosto(params.getRaw().get(0));
-            
-            
         } catch(Exception e) {
             e.printStackTrace();
-        }
-
-        
-    
-        
+        }      
     }
 
     /**

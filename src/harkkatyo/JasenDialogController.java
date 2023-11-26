@@ -25,11 +25,6 @@ import kerho.Jasen;
  *
  */
 public class JasenDialogController implements ModalControllerInterface<Jasen>, Initializable {
-//
-//    @FXML private TextField editNimi;
-//    @FXML private TextField editSuku;
-//    @FXML private TextField editHcp;
-//    @FXML private TextField editSeura;
     @FXML private Label labelVirhe;
     @FXML private GridPane gridJasen;
 
@@ -82,7 +77,6 @@ public class JasenDialogController implements ModalControllerInterface<Jasen>, I
         jasenKohdalla = oletus;
         naytaJasen(edits, jasenKohdalla);
     }
-// 
     
     
     private Jasen jasenKohdalla;  
@@ -114,22 +108,12 @@ public class JasenDialogController implements ModalControllerInterface<Jasen>, I
                     kasitteleMuutosJaseneen((TextField) (e.getSource()));
                     kasitteleMuutosHcp((TextField) (e.getSource()));
                 });
-//                edit.setOnKeyReleased(e -> kasitteleMuutosJaseneen((TextField)(e.getSource())));
-                // edit.setOnKeyReleased(e -> kasitteleMuutosHcp((TextField)(e.getSource())));
             }
-
-        
-//        edits = new TextField[] {editNimi, editHcp, editSeura};
-//        editNimi.setOnKeyReleased(e -> kasitteleMuutosJaseneen(editNimi));
-//        editHcp.setOnKeyReleased(e -> kasitteleMuutosHcp(editHcp));
-//
     }
     
     
     public static void naytaJasen(TextField[] edits, Jasen jasen) {
-        if (jasen == null) return;
-//        edits[0].setText(jasen.getNimi());
-//        edits[1].setText(String.format("%.2f", jasen.getHcp()));  
+        if (jasen == null) return; 
         for (int k = jasen.ekaKentta(); k < jasen.getKenttia(); k++) {
             edits[k].setText(jasen.anna(k));
         }
@@ -164,48 +148,12 @@ public class JasenDialogController implements ModalControllerInterface<Jasen>, I
         if(virhe == null) {
             Dialogs.setToolTipText(edit,"");
             naytaVirhe(virhe);
-           // edit.getStyleClass().add("normaali");
         } else {
             Dialogs.setToolTipText(edit,virhe);
             naytaVirhe(virhe);
-           // edit.getStyleClass().add("virhe");
         }
 
-        
-        
-//        try {
-//            double hcp = Double.parseDouble(s);
-//            String virhe = jasenKohdalla.setHcp(hcp);
-//            if(virhe == null) {
-//                Dialogs.setToolTipText(edit, "");
-//                edit.getStyleClass().add("normaali");
-//                //System.err.println(virhe);
-//                labelVirhe.setText("");
-//            } else {
-//                Dialogs.setToolTipText(edit, "");
-//                naytaVirhe(virhe);
-//                edit.getStyleClass().add("virhe");
-//                labelVirhe.setText(virhe);
-//
-//                
-//            }
-//        } catch (NumberFormatException e) {
-//            System.err.println("Virheellinen tasoitus.");
-//            labelVirhe.setText("Virhe");
-
-        
-//        String s = edit.getText();
-//        double virhe = 0;
-//        virhe = jasenKohdalla.setHcp(s);
-//        if(virhe == 0) { // WTF
-//           System.err.println("JFJAFJAJF");
-//        } else {
-//            System.err.println("JFJAFJAJF");
-//        }
-    }
-
-    
-    
+    }    
     
     public static Jasen kysyJasen(Stage modalityStage, Jasen oletus) {
        return ModalController.showModal(KlubbenGUIController.class.getResource("LisaaPelaajaGUIView.fxml"), "Jäsen", modalityStage, oletus);
