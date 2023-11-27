@@ -12,8 +12,6 @@ public class Kentat implements Iterable<Kentta> {
 
     private Collection<Kentta> alkiot = new ArrayList<Kentta>();
     private String tiedostonNimi = "";
-
-    
     
     public Kentat() {
         //
@@ -50,18 +48,13 @@ public class Kentat implements Iterable<Kentta> {
             throw new SailoException("Tiedosto " + ftied.getAbsolutePath() + " ei aukea");
         }        
     }
-
-    
-    
     
     public List<Kentta> annaKentat(int tunnusnro){
         List<Kentta> loydetyt = new ArrayList<Kentta>();
         for(Kentta ken : alkiot)
             if(ken.getkenttaNro() == tunnusnro) loydetyt.add(ken);
         return loydetyt;
-    }
-    
-    
+    }   
     
     public static void main(String[] args) {
         
@@ -70,14 +63,11 @@ public class Kentat implements Iterable<Kentta> {
             pelialustat.lueTiedostosta("henkilot");
         } catch (SailoException ex) {
             System.err.println(ex.getMessage());
-        }
-        
+        }    
         Kentta kentta1 = new Kentta();
         kentta1.vastaaKentta(1);
         Kentta kentta2 = new Kentta();
         kentta2.vastaaKentta(2);
-
-
     }
 
     @Override

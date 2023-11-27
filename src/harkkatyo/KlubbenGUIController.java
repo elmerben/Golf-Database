@@ -2,6 +2,7 @@ package harkkatyo;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -74,7 +76,9 @@ public class KlubbenGUIController implements Initializable {
         Dialogs.showMessageDialog("Voitit pelin");
     }
 
-
+    /*
+     * Alustus.
+     */
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
         klubben = new Klubben();
@@ -84,6 +88,10 @@ public class KlubbenGUIController implements Initializable {
         hakuKentta.textProperty().addListener((obs, vanhaArvo, uusiArvo) -> suoritaHaku(uusiArvo));
     }
 
+    @FXML
+    void handleTulostaTulos(ActionEvent event) {
+        tulostaTiedot();
+    }    
     
     @FXML
     void handleTallenna() {
@@ -110,6 +118,10 @@ public class KlubbenGUIController implements Initializable {
         uusiPelaaja(); 
     }
     
+    /*
+     * Käsittelee Poista-painikkeen tapahtumat.
+     * Poistaa valitun jäsenen tai kierroksen.
+     */
     @FXML
     void handlePoista(ActionEvent event) {
         Jasen valittuJasen = chooserJasenet.getSelectedObject();
@@ -129,6 +141,42 @@ public class KlubbenGUIController implements Initializable {
     
    // _____________________________________________________
     
+    
+    /*
+     * Funktio, joka tekee uuden ikkunan ja tulostaa siihen valitun
+     * pelaajan kaikki tiedot.
+     */
+    private void tulostaTiedot() {
+        Jasen valittuJasen = chooserJasenet.getSelectedObject();
+        if (valittuJasen == null) return;
+        Stage tulostusStage = new Stage();
+        tulostusStage.setTitle("Pelaajan tiedot");
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(10));
+        TextArea textArea = new TextArea();
+        textArea.setEditable(false);
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("Nimi: ").append(valittuJasen.getNimi()).append("\n");
+        sb.append("Seura: ").append(valittuJasen.getSeura()).append("\n");
+        sb.append("Tasoitus: ").append(valittuJasen.getHcp()).append("\n\n");
+        sb.append("Kierrokset:\n");
+        List<Kierros> kierrokset = klubben.annaKierrokset(valittuJasen);
+        for (Kierros k : kierrokset) {
+            sb.append(k.toString()).append("\n");
+        }
+        textArea.setText(sb.toString());
+        vbox.getChildren().add(textArea);
+
+        Scene scene = new Scene(vbox, 400, 300);
+        tulostusStage.setScene(scene);
+        tulostusStage.show();      
+    }
+    
+    /*
+     * Hakukentän toiminnallisuus. Päivittyy interaktiivisesti
+     * käyttäjän lisätessä merkkejä syötteeseen.
+     */
     private void suoritaHaku(String hakuteksti) {
         chooserJasenet.clear();
         for (int i = 0; i < klubben.getJasenia(); i++) {
@@ -139,6 +187,11 @@ public class KlubbenGUIController implements Initializable {
         }
     }    
     
+    /**
+     * Poistaa valitun kierroksen.
+     * @param kierros Poistettava kierros.
+     * @param valittuJasen Jäsen, jolta kierros poistetaan.
+     */
     private void poistaKierros(Kierros kierros, Jasen valittuJasen) {
         try {
             klubben.poistaKierros(kierros); 
@@ -148,6 +201,9 @@ public class KlubbenGUIController implements Initializable {
         }
     }
     
+    /*
+     * Poistaa valitun jäsenen.
+     */
     private void poistaJasen(Jasen valittuJasen) {
         if (valittuJasen == null) return;
         
@@ -156,11 +212,12 @@ public class KlubbenGUIController implements Initializable {
         } catch (SailoException e) {
             e.printStackTrace();
         }
-        hae(0);
-        
-    }
+        hae(0);        
+    }    
     
-    
+    /*
+     * Lataa kerhon tiedot tiedostosta.
+     */
     protected void lueTiedosto(String nimi) {
         kerhonnimi = nimi;
         try {
@@ -170,12 +227,13 @@ public class KlubbenGUIController implements Initializable {
             Dialogs.showMessageDialog(e.getMessage());
         }
     }
-    
-
 
     private Klubben klubben;
     private TextField[] edits;
     
+    /*
+     * Alustaa käyttöliittymän.
+     */
     private void alusta() {
         panelJasen.setFitToHeight(true);
         chooserJasenet.clear();
@@ -184,6 +242,9 @@ public class KlubbenGUIController implements Initializable {
 
     }
     
+    /*
+     * Näyttää valitun jäsenen tiedot käyttöliittymässä.
+     */
     protected void naytaJasen() {
         Jasen jasen = chooserJasenet.getSelectedObject();       
         if (jasen == null) return; 
@@ -192,13 +253,16 @@ public class KlubbenGUIController implements Initializable {
         naytaKierrokset(jasen);       
     }
     
+    /*
+     * Muokkaa valittua jäsentä.
+     */
     private void muokkaa() {
         Jasen jasen = chooserJasenet.getSelectedObject();
         if (jasen == null) return;
         try {
         jasen = jasen.clone();
         } catch (CloneNotSupportedException e) {
-            
+            //
         }
         jasen = JasenDialogController.kysyJasen(null, jasen);
         if (jasen == null) return;
@@ -210,6 +274,9 @@ public class KlubbenGUIController implements Initializable {
         hae(jasen.getTunnusNro());
     }
     
+    /*
+     * Näyttää valitun jäsenen kierrokset.
+     */
     private void naytaKierrokset(Jasen jasen) {
         tableKierrokset.clear();
         if(jasen == null) return;
@@ -218,13 +285,18 @@ public class KlubbenGUIController implements Initializable {
         for (Kierros kie : kierrokset)
             naytaKierros(kie);
     }
-//    
+    
+    /*
+     * Näyttää tiedot koskien yksittäistä kierrosta.
+     */
     private void naytaKierros(Kierros kie) {
         String[] rivi = kie.toString().split("\\|");
         tableKierrokset.add(kie, rivi);
     }
     
-    
+    /*
+     * Tulostaa valitun jäsenen tiedot.
+     */
     public void tulosta(PrintStream os, final Jasen jasen) {
         os.println("-----------------------");
         jasen.tulosta(os);
@@ -232,21 +304,23 @@ public class KlubbenGUIController implements Initializable {
         List<Kierros> kierrokset = klubben.annaKierrokset(jasen);
         for(Kierros rundi : kierrokset)
             rundi.tulosta(os);
-        os.println("------------------------");
-        
+        os.println("------------------------");        
     }
+    
     
     public void setKerho(Klubben klubben) {
         this.klubben = klubben;
         naytaJasen();
-    }
+    }    
     
     
     public void LisaaKentta() {
         Dialogs.showMessageDialog("Lisää kenttä");
-
     }
 
+    /*
+     * Avaa ikkunan tuloksen lisäämistä varten.
+     */
     public void uusiTulos() {
         
         try {
@@ -269,13 +343,18 @@ public class KlubbenGUIController implements Initializable {
             e.printStackTrace();
         }
     }
-
     
+    /*
+     * Peruutustoiminto.
+     */
     public void peruuta() {
         Dialogs.showMessageDialog("Peruuta");
 
     }
     
+    /*
+     * Tallennustoiminto.
+     */
     public void tallenna() {
         try {
             klubben.tallenna();
@@ -284,6 +363,9 @@ public class KlubbenGUIController implements Initializable {
         }
     }
     
+    /*
+     * Uuden jäsenen lisäämisen toiminto.
+     */
     public void uusiPelaaja() {
         Jasen uusi = new Jasen();
         uusi = JasenDialogController.kysyJasen(null, uusi);
@@ -298,11 +380,18 @@ public class KlubbenGUIController implements Initializable {
         hae(uusi.getTunnusNro());
     }   
     
+    /*
+     * Tarkistaa voiko sovelluksen sulkea ja tallentaa tiedot 
+     * ennen sen sulkemista.
+     */
     public boolean voikoSulkea() {
         tallenna();
         return true;
     }
      
+    /*
+     * Hakee ja näyttää jäsenet tiettyjen ehtojen perusteella.
+     */
     private void hae(int jnro) {
         chooserJasenet.clear();
          int index = 0;
@@ -315,6 +404,9 @@ public class KlubbenGUIController implements Initializable {
          chooserJasenet.setSelectedIndex(index);
         }    
     
+    /*
+     * Lisää uuden jäsenen.
+     */
     protected void uusiJasen() {
         Jasen uusi = new Jasen();
         uusi = JasenDialogController.kysyJasen(null, uusi);

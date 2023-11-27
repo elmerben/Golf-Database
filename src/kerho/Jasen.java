@@ -23,40 +23,63 @@ public class Jasen implements Cloneable {
     
     private static int seuraavaNro = 1;
     
+    /*
+     * Palauttaa jäsenen tunnusnumeron hash-koodina.
+     */
     @Override
     public int hashCode() {
         return tunnusNro;
     }
-    
+    /*
+     * Palauttaa jäsenen tietokenttien lukumäärän.
+     */
     public int getKenttia() {
         return 4;
     }
-    public String setNimi(String s) { // WTF
+    
+    /*
+     * Asettaa jäsenelle nimen ja palauttaa null jos asettaminen onnistui.
+     */
+    public String setNimi(String s) {
         nimi = s;
         return null;        
     }
 
+    /*
+     * Vertaa jäsentä toiseen jäseneen käyden jokaisen kentän läpi.
+     */
     public boolean equals(Jasen jasen) {
         if ( jasen == null ) return false;
         for (int k = 0; k < getKenttia(); k++)
             if ( !anna(k).equals(jasen.anna(k)) ) return false;
         return true;
     }    
-    
+    /*
+     * Overridaa tai "ylikirjoittaa Object-luokan equals-metodin jäsenien vertailussa.
+     */
     @Override
     public boolean equals(Object jasen) {
         if ( jasen instanceof Jasen ) return equals((Jasen)jasen);
         return false;
     }
     
+    /*
+     * Palauttaa jäsenen nimen.
+     */
     public String getNimi() {
         return this.nimi;
     }
-
+    
+    /*
+     * Palauttaa ensimmäisen kentän indeksin.
+     */
     public int ekaKentta() {
         return 1;
     }
     
+    /*
+     * Palauttaa kysymyksen, joka liittyy kunkin kentän indeksiin.
+     */
     public String getKysymys(int k) {
         switch (k) {
         case 0: return "tunnusNro";
@@ -67,6 +90,9 @@ public class Jasen implements Cloneable {
         }
     }
 
+    /*
+     * Palauttaa annetun kentän arvon.
+     */
     public String anna(int k) {
         switch (k) {
         case 0: return "" + tunnusNro;
@@ -74,12 +100,15 @@ public class Jasen implements Cloneable {
         case 2: return "" + kotiseura;
         case 3: return tasoitus;
         default: return "Ääliö";
-
         }
     }
     
     private HcpTarkistus tasurit = new HcpTarkistus();
     
+    /*
+     * Asettaa annetun kentän arvoksi merkkijonon ja virheen kohdalla
+     * palauttaa virheen.
+     */
     public String aseta(int k, String jono) {
         String tjono = jono.trim();
         StringBuffer sb = new StringBuffer(tjono);
@@ -104,7 +133,7 @@ public class Jasen implements Cloneable {
     }
     
     /**
-     * Konstruktori
+     * Konstruktori.
      */
     public Jasen() {
         
@@ -117,9 +146,11 @@ public class Jasen implements Cloneable {
         out.println(String.format("Tunnusnro: " + "%04d", tunnusNro) + " |" + " Nimi: " + nimi + " |" + " Kotiseura: " + kotiseura + " |" + " Tasoitus: " + tasoitus + " |");
     }
     
+    /**
+     * Overridaa Object-luokan toString-metodin. Palauttaa jäsenen merkkijonona.
+     */
     @Override
-    public String toString() {
-        
+    public String toString() {        
         StringBuffer sb = new StringBuffer("");
         String erotin = "";
         for (int k = 0; k < getKenttia(); k++) {
@@ -138,6 +169,11 @@ public class Jasen implements Cloneable {
         return this.tunnusNro;
     }    
     
+    /**
+     * Asettaa jäsenelle tunnuksen ja samalla
+     * päivittää seuraavan vapaan numeron.
+     * @param nr
+     */
     private void setTunnusNro(int nr) {
         tunnusNro = nr;
         if(tunnusNro >= seuraavaNro) seuraavaNro = tunnusNro + 1;
@@ -164,18 +200,31 @@ public class Jasen implements Cloneable {
         return this.tunnusNro;
     }    
     
+    /**
+     * Tulostaa jäsenen tiedot Outputsream-olioon.
+     */
     public void tulosta(OutputStream os) {
         tulosta(new PrintStream(os));
     }    
 
+    /*
+     * Palauttaa jäsenen seuran.
+     */
     public String getSeura() {
         return kotiseura;
     }
     
+    /*
+     * Palauttaa tasoituksen.
+     */
     public String getHcp() {
         return tasoitus;
     }    
 
+    /*
+     * Antaa jäsenelle uuden tasoituksen sekä 
+     * tarvittaessa palauttaa virheen 
+     */
     public String setHcp(String s) {
         HcpTarkistus tarkistaja = new HcpTarkistus();
         String virhe = tarkistaja.tarkista(s);
@@ -190,20 +239,17 @@ public class Jasen implements Cloneable {
     public static void main(String[] args) {
         Jasen aku = new Jasen();
         Jasen aku2 = new Jasen();
-
-        
         aku.rekisteroi();
         aku2.rekisteroi();
         
         aku.tulosta(System.out);
         aku.tulosta(System.out);
         aku2.tulosta(System.out);
+    }    
 
-
-
-    }
-    
-
+    /*
+     * Lukee jäsenen tiedot merkkijonosta.
+     */
     public void parse(String rivi) {
         StringBuffer sb = new StringBuffer(rivi);
         for(int k = 0; k < getKenttia(); k++)
@@ -211,18 +257,15 @@ public class Jasen implements Cloneable {
 
     }
 
-
+    /*
+     * Kloonaa jäsen-olion.
+     */
     @Override
     public Jasen clone() throws CloneNotSupportedException {
         Jasen uusi;
         uusi = (Jasen)super.clone();
         return uusi;
     }
-
-
-    
-    
-        
     }
 
 

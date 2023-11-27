@@ -35,6 +35,9 @@ public class JasenDialogController implements ModalControllerInterface<Jasen>, I
         alusta();
     }
 
+    /*
+     * OK-painikkeen toiminnallisuus.
+     */
     @FXML private void handleOk() {
         if (jasenKohdalla != null && jasenKohdalla.getNimi().trim().equals("")) {
             naytaVirhe("Nimi ei saa olla tyhjä.");
@@ -42,15 +45,18 @@ public class JasenDialogController implements ModalControllerInterface<Jasen>, I
         }
         ModalController.closeStage(gridJasen);
         }
-
-    
-    
+        
+    /*
+     * Peruuta-painikkeen toiminnallisuus.
+     */
     @FXML private void handleCancel() {
         jasenKohdalla = null;
         ModalController.closeStage(gridJasen);
-    }
+    }    
     
-    
+    /*
+     * Palauttaa tuloksen dialogin perusteella.
+     */
     @Override
     public Jasen getResult() {
         return jasenKohdalla;
@@ -59,10 +65,12 @@ public class JasenDialogController implements ModalControllerInterface<Jasen>, I
     @Override
     public void handleShown() {
         //
-    }
+    }    
     
-    
-    private void naytaVirhe(String virhe) { //WTF
+    /*
+     * Näyttää virheen.
+     */
+    private void naytaVirhe(String virhe) {
         if(virhe == null || virhe.isEmpty()) {
             labelVirhe.setText("");
             labelVirhe.getStyleClass().removeAll("virhe");
@@ -72,17 +80,22 @@ public class JasenDialogController implements ModalControllerInterface<Jasen>, I
         labelVirhe.getStyleClass().add("virhe");
     }
 
+    /*
+     * Asettaa oletusjäsenen dialogiin.
+     */
     @Override
     public void setDefault(Jasen oletus) {
         jasenKohdalla = oletus;
         naytaJasen(edits, jasenKohdalla);
     }
-    
-    
+        
     private Jasen jasenKohdalla;  
     private TextField[] edits;
     private static Jasen apujasen = new Jasen();
     
+    /*
+     * Luo tekstikentät dialogiin. Sen jälkeen palauttaa ne.
+     */
     public static TextField[] luoKentat(GridPane gridJasen) {
         gridJasen.getChildren().clear();
         TextField[] edits = new TextField[apujasen.getKenttia()];
@@ -94,12 +107,13 @@ public class JasenDialogController implements ModalControllerInterface<Jasen>, I
             edits[k] = edit;
             edit.setId("e"+k);
             gridJasen.add(edit, 1, i);
-        }
-        
-        return edits;
-        
+        }        
+        return edits;        
     }
     
+    /*
+     * Alustaa dialogin.
+     */
     private void alusta() {
         edits = luoKentat(gridJasen);
         for(TextField edit : edits)
@@ -109,9 +123,11 @@ public class JasenDialogController implements ModalControllerInterface<Jasen>, I
                     kasitteleMuutosHcp((TextField) (e.getSource()));
                 });
             }
-    }
+    }    
     
-    
+    /*
+     * Näyttää jäsenen tiedot tekstikentissä.
+     */
     public static void naytaJasen(TextField[] edits, Jasen jasen) {
         if (jasen == null) return; 
         for (int k = jasen.ekaKentta(); k < jasen.getKenttia(); k++) {
@@ -119,6 +135,9 @@ public class JasenDialogController implements ModalControllerInterface<Jasen>, I
         }
     }
     
+    /*
+     * Palauttaa kentän tunnuksen.
+     */
     public static int getFieldId(Object obj, int oletus) {
         if ( !(obj instanceof Node)) return oletus;
         Node node = (Node)obj;
@@ -126,6 +145,9 @@ public class JasenDialogController implements ModalControllerInterface<Jasen>, I
     }
     
     
+    /*
+     * Käsittelee muutokset koskien jäsenen tietoja.
+     */
     private void kasitteleMuutosJaseneen(TextField edit) {
         if(jasenKohdalla == null) return;
         String s = edit.getText();
@@ -140,6 +162,9 @@ public class JasenDialogController implements ModalControllerInterface<Jasen>, I
         }
     }
     
+    /*
+     * Käsittelee muutokset koskien jäsenen tasoitusta.
+     */
     private void kasitteleMuutosHcp(TextField edit) {
         if(jasenKohdalla == null) return;
         String s = edit.getText();
@@ -152,12 +177,12 @@ public class JasenDialogController implements ModalControllerInterface<Jasen>, I
             Dialogs.setToolTipText(edit,virhe);
             naytaVirhe(virhe);
         }
-
     }    
     
+    /*
+     * Näyttää dialogin jäsenen kysymiseen.
+     */
     public static Jasen kysyJasen(Stage modalityStage, Jasen oletus) {
        return ModalController.showModal(KlubbenGUIController.class.getResource("LisaaPelaajaGUIView.fxml"), "Jäsen", modalityStage, oletus);
-       
-       
     }
 }

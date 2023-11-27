@@ -25,9 +25,7 @@ public class Jasenet {
     private boolean muutettu = false;
     private String kokoNimi = "";
     
-    int lkm = 0;
-    
-
+    int lkm = 0;    
 
     public static void main(String[] args) {
         Jasenet jasenet = new Jasenet();
@@ -41,7 +39,6 @@ public class Jasenet {
         } catch (SailoException e) {
             System.err.println(e.getMessage());
         }
-
         for (int i = 0; i < jasenet.getLkm(); i++) {
             Jasen jasen = jasenet.anna(i);
             System.out.println("Jäsenindeksi: " + i);
@@ -49,10 +46,16 @@ public class Jasenet {
         }
     }
     
+    /*
+     * Lukee jäsenten tiedot tiedostosta.
+     */
     public void lueTiedostosta() throws SailoException {
         lueTiedostosta(getTiedostonPerusNimi());
     }    
     
+    /*
+     * Lukee jäsenen tiedot parametrina annetun tiedoston nimestä.
+     */
     public void lueTiedostosta(String tied) throws SailoException {        
         setTiedostonPerusNimi(tied);
         try (BufferedReader fi = new BufferedReader(new FileReader(getTiedostonNimi()))){
@@ -76,10 +79,11 @@ public class Jasenet {
         } catch ( IOException e ) {
             throw new SailoException("Ongelmia tiedoston kanssa: " + e.getMessage());
         }
- 
-
         }       
     
+    /*
+     *  Poistaa jäsenen listalta jos jäsen löytyy.
+     */
     public boolean poista(Jasen poistettavaJasen) {
         if (poistettavaJasen == null) return false;
         int poisto = -1;
@@ -98,12 +102,15 @@ public class Jasenet {
         alkiot[lkm] = null;
         muutettu = true;
         return true;
-    }
+    } 
     
     public void talleta() throws SailoException {
         tallenna();
     }    
     
+    /*
+     * Tallentaa jäsenen tiedot muutoksien yhteydessä.
+     */
     public void tallenna() throws SailoException {
         if (!muutettu) return;
         
@@ -144,6 +151,9 @@ public class Jasenet {
     }
     
     
+    /*
+     * Lisää jäsenen listaan.
+     */
     public void lisaa(Jasen jasen) {
         if ( lkm >= alkiot.length) alkiot = Arrays.copyOf(alkiot, lkm + 20);
         alkiot[lkm] = jasen;
@@ -151,6 +161,10 @@ public class Jasenet {
         muutettu = true;
     }
     
+    /*
+     * Korvaa annetun jäsene listassa tai lisää, jos jäsentä
+     * ei vielä ole olemassa.
+     */
     public void korvaaTaiLisaa(Jasen jasen) {
         int id = jasen.getTunnusNro();
         for (int i = 0; i < lkm; i++) {
@@ -160,16 +174,21 @@ public class Jasenet {
                 return;
             }
         }
-        lisaa(jasen);
-        
+        lisaa(jasen); 
     }
     
+    /*
+     * Palauttaa tietyssä indeksissä olevan jäsenen.
+     */
     public Jasen anna(int i) throws IndexOutOfBoundsException {
         if (i < 0 || this.lkm <= i)
             throw new IndexOutOfBoundsException("Laiton indeksi: " + i);
         return alkiot[i];
     }
     
+    /*
+     * Konstruktori.
+     */
     public Jasenet() {
         alkiot = new Jasen[MAX_JASENIA];
     }
@@ -181,7 +200,4 @@ public class Jasenet {
     public int getLkm() {
         return lkm;
     }
-
-
-
 }

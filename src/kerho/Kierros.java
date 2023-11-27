@@ -45,40 +45,52 @@ public class Kierros {
         this.tulosYht = tulosYht;
     }
     
+    /*
+     * Laskee etuysin ja takaysin tulokset yhteen kokonaistulokseksi.
+     */
     private void laskeYhteistulos() {
         this.tulosYht = this.tulosEtu + this.tulosTaka;
-    }
+    }    
     
-    
+    /*
+     * Asettaa lyhenteen kentälle, jonka maksimipituus
+     * on kuusi merkkiä.
+     */
     public void setKenttaLyhenne(String kenttaLyhenne) {
         if (kenttaLyhenne.length() <= 6) {
             this.kenttaLyhenne = kenttaLyhenne;
         } else {
             this.kenttaLyhenne = kenttaLyhenne.substring(0, 6);
         }
-    }
+    }    
     
-    
+    /*
+     * Konstruktori.
+     */
     public Kierros() {
         //
     }
     
+    /*
+     * Konstruktori, jossa on pelaajanumero.
+     */
     public Kierros(int pelaajaNro) {
         this.pelaajaNro = pelaajaNro;
         rekisteroi();
-    }
+    }    
     
-    
+    /*
+     * Asettaa kierrokselle tunnusnumeron.
+     */
     private void setTunnusNro(int nr) {
         kierrostunnus = nr;
         if ( kierrostunnus >= seuraavaNro ) seuraavaNro = kierrostunnus + 1;
     }
     
-
-    
-    public void parse(String rivi) {
-        
-        
+    /*
+     * Jäsentelee sopivaksi tiedot merkkijonon perusteella.
+     */
+    public void parse(String rivi) {        
         StringBuffer sb = new StringBuffer(rivi);
         pvm = Mjonot.erota(sb, '|', pvm);
         kenttaLyhenne = Mjonot.erota(sb, '|', kenttaLyhenne);
@@ -87,16 +99,14 @@ public class Kierros {
         tulosYht = Mjonot.erota(sb, '|', tulosYht);
         pelaajaNro = Mjonot.erota(sb, '|', pelaajaNro);
     }
-
     
     public int getKenttia() {
         return 5;
     }
-    public String PaivaM() {
-        String PaivaMaara = (rand(1, 30) + "." + rand(1, 12)+ "." + rand(1900, 2100));
-        return PaivaMaara;
-    }
-    
+
+    /*
+     * Palauttaa kunkin kierroksen tunnusnumeron.
+     */
     public int getKierrosID() {
         int numero = seuraavaNro;
         if ( kierrostunnus >= seuraavaNro ) seuraavaNro = kierrostunnus + 1;
@@ -104,7 +114,9 @@ public class Kierros {
 
     }
     
-    
+    /*
+     * Palauttaa kierroksen tiedot kunkin kentän pohjalta.
+     */
     public String anna(int k) {
         switch (k) {
         case 0: return "" + getKierrosID();
@@ -113,22 +125,23 @@ public class Kierros {
         case 3: return Integer.toString(kenttaID);
         case 4: return Integer.toString(tulosYht);
         default: return "Ääliö";
-
         }
     }
     
-    
-    
+    /*
+     * Palauttaa kierroksen tiedot merkkijonona.
+     */
     @Override
     public String toString() {
         return  pvm + "|" + kenttaLyhenne + "|" + tulosEtu + "|" + tulosTaka + "|" + tulosYht + "|" + pelaajaNro ;
-    }
-    
+    }    
 
+    /*
+     * Tulostaa kierroksen.
+     */
     public void tulosta(PrintStream out) {
-//        out.println("Paivamaara: " + pvm + " Tulos yht: " + tulosYht);
         out.println("Päivämäärä: " + pvm);
-        out.println("Kenttä: " + kenttaLyhenne); // Olettaen, että tämä on haluttu kentän nimi
+        out.println("Kenttä: " + kenttaLyhenne);
         out.println("Tulos etu: " + tulosEtu);
         out.println("Tulos taka: " + tulosTaka);
         out.println("Tulos yhteensä: " + tulosYht); 
@@ -138,6 +151,9 @@ public class Kierros {
         tulosta(new PrintStream(os));
     }
 
+    /*
+     * Rekisteröi kierroksen. Palauttaa myös sen tunnuksen.
+     */
     public int rekisteroi() {
         kierrostunnus = seuraavaNro;
         seuraavaNro++;
@@ -151,14 +167,10 @@ public class Kierros {
     public int getJasenNro() {
         return pelaajaNro;
     }
-
-
-
     
     public static void main(String[] args) {
         Kierros rundi = new Kierros();
         rundi.rekisteroi();
-//        rundi.vastaaKierros(2);
         rundi.tulosta(System.out);
     }
     

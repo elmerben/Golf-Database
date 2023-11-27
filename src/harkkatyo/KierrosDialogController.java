@@ -30,6 +30,9 @@ public class KierrosDialogController implements ModalControllerInterface<Kierros
 
     
     
+    /*
+     * Alustus.
+     */
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         alusta();
@@ -40,6 +43,9 @@ public class KierrosDialogController implements ModalControllerInterface<Kierros
         return kierrosKohdalla;
     }
 
+    /*
+     * Käsittelee dialogin näyttämisen.
+     */
     @Override
     public void handleShown() {
         kentta = Math.max(apukierros.ekaKentta(), Math.min(kentta, apukierros.getKenttia()-1)); 
@@ -52,6 +58,9 @@ public class KierrosDialogController implements ModalControllerInterface<Kierros
         naytaHarrastus(edits, kierrosKohdalla);
     }
 
+    /*
+     * Käsittelee OK-painikkeen.
+     */
     @FXML private void handleOK() {
         if ( kierrosKohdalla != null && kierrosKohdalla.anna(apukierros.ekaKentta()).trim().equals("") ) {
             naytaVirhe("Nimi ei saa olla tyhjä");
@@ -60,6 +69,9 @@ public class KierrosDialogController implements ModalControllerInterface<Kierros
         ModalController.closeStage(labelVirhe);
     }
 
+    /*
+     * Käsittelee Peruuta-painikkeen.
+     */
     @FXML private void handleCancel() {
         kierrosKohdalla = null;
         ModalController.closeStage(labelVirhe);
@@ -68,9 +80,7 @@ public class KierrosDialogController implements ModalControllerInterface<Kierros
     private Kierros kierrosKohdalla;
     private TextField[] edits;
     private static Kierros apukierros = new Kierros();
-    private int kentta = 0;  // mikä kenttä aktivoidaan kun dialogi aukaistaan
-    
-    
+    private int kentta = 0;   
 
     public static int getFieldId(Object obj, int oletus) {
         if ( !( obj instanceof Node)) return oletus;
@@ -78,6 +88,9 @@ public class KierrosDialogController implements ModalControllerInterface<Kierros
         return Mjonot.erotaInt(node.getId().substring(1),oletus);
     }
  
+    /*
+     * Luo ja palauttaa dialogin tekstikentät.
+     */
     public static TextField[] luoKentat(GridPane gridHarrastus) {
         gridHarrastus.getChildren().clear();
         TextField[] edits = new TextField[apukierros.getKenttia()];
@@ -91,9 +104,11 @@ public class KierrosDialogController implements ModalControllerInterface<Kierros
             gridHarrastus.add(edit, 1, i);
         }
         return edits;
-    }
+    }    
     
-    
+    /*
+     * Alustaa dialogin komponentit.
+     */
     private void alusta() {
         edits = luoKentat(gridHarrastus);
         for (TextField edit : edits)
@@ -101,13 +116,14 @@ public class KierrosDialogController implements ModalControllerInterface<Kierros
                 edit.setOnKeyReleased( e -> kasitteleMuutosHarrastukseen((TextField)(e.getSource())));
         panelHarrastus.setFitToHeight(true);
     }
-
     
     private void setKentta(int kentta) {
        this.kentta = kentta; 
     }
-
     
+    /*
+     * Käsittelee kierroksen tietojen muutokset.
+     */
     private void kasitteleMuutosHarrastukseen(TextField edit) {
         if (kierrosKohdalla == null) return;
         String s = edit.getText();
@@ -115,25 +131,27 @@ public class KierrosDialogController implements ModalControllerInterface<Kierros
         String virhe = kierrosKohdalla.aseta(k, s);
         
         if (virhe != null) {
-           // Dialogs.setToolTipText(edit,virhe); 
             edit.getStyleClass().add("virhe");
             naytaVirhe(virhe);
         } else {
-           // Dialogs.setToolTipText(edit,""); 
             edit.getStyleClass().removeAll("virhe");
             naytaVirhe(virhe);
         }
-    }
-    
+    }    
 
+    /*
+     * Näyttää kierroksen tiedot kentässä.
+     */
     public static void naytaKierros(TextField[] edits, Kierros kierros) {
         if (kierros == null) return;
         for (int k = kierros.ekaKentta(); k < kierros.getKenttia(); k++) {
             edits[k].setText(kierros.anna(k));
         }
-    }
-    
+    }    
   
+    /*
+     * Näyttää virheen.
+     */
     private void naytaVirhe(String virhe) {
         if ( virhe == null || virhe.isEmpty() ) {
             labelVirhe.setText("");
@@ -144,6 +162,9 @@ public class KierrosDialogController implements ModalControllerInterface<Kierros
         labelVirhe.getStyleClass().add("virhe");
     }
     
+    /*
+     * Näyttää dialogin koskien kierroksen tietoja.
+     */
     public static Kierros kysyHarrastus(Stage modalityStage, Kierros oletus, int kentta) {
         return ModalController.<Kierros, KierrosDialogController>showModal(
                 KierrosDialogController.class.getResource("HarrastusDialogView.fxml"), 
@@ -151,8 +172,4 @@ public class KierrosDialogController implements ModalControllerInterface<Kierros
                   modalityStage, oletus,
                   ctrl -> ctrl.setKentta(kentta));
     }
-
-
-
-    
 }

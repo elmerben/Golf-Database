@@ -6,7 +6,14 @@ public class HcpTarkistus {
     public static final String DESIMAALIT = "0123456789";
 
     
-    
+    /**
+     * Tarkastaa tasoituksen oikeellisuuden.
+     * Ehtona ennen desimaalia täytyy olla yksi tai kaksi numeroa
+     * ja desimaalin jälkeen yksi numero.
+     * Se ei myöskään voi olla suurempi kuin 54.0
+     * @param tasoitus Tarkastettava tasoitus merkkijonona.
+     * @return null jos menee läpi, muuten virhe.
+     */
     public String tarkista(String tasoitus) {
         int pituus = tasoitus.length();
         if(pituus > 4) return "Tasoituksessa liikaa merkkejä.";

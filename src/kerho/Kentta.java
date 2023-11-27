@@ -35,8 +35,7 @@ public class Kentta {
     private void setKenttaNro(int nr) {
         kenttaNro = nr;
         if(kenttaNro >= seuraavaNro) seuraavaNro = kenttaNro + 1;
-    }
-    
+    }    
     
     public void parse(String rivi) {
         StringBuffer sb = new StringBuffer(rivi);
@@ -46,38 +45,26 @@ public class Kentta {
         parEtu = Mjonot.erota(sb, '|', parEtu);
         parTaka = Mjonot.erota(sb, '|', parTaka);
         parKoko = Mjonot.erota(sb, '|', parKoko);
-    }
+    }    
     
     
-    
-    public void vastaaKentta(int nro) {
-//        tunnusNro = tunnusTarkistus.rand(1, 2000);
-//        kotiseura = "LPG ";
-//        tasoitus = tunnusTarkistus.rand2(0.0, 52.0);
-        
+    public void vastaaKentta(int nro) {        
         kenttaNro = seuraavaNro;
         lyhenne = "JEK";
         nimi = "Jekku Jee";
         parEtu = tunnusTarkistus.rand(20, 40);
         parTaka = tunnusTarkistus.rand(20, 40);
-        parKoko = parEtu + parTaka;
-        
-    }
-    
-    
+        parKoko = parEtu + parTaka;        
+    }    
     
     public int getkenttaNro() {
         return kenttaNro;
-    }
-    
+    }    
     
     @Override
     public String toString() {
         return "" + getkenttaNro() + "|" + lyhenne + "|" + nimi + "|" + parEtu + "|" + parTaka + "|" + parKoko;
     }
-
-    
-
     
     public void tulosta(PrintStream out) {
         out.println(String.format("Kenttanumero: " + "%04d", kenttaNro) + " |" + " Nimi: " + nimi + " |" + " Par etu: " + parEtu + " |" + " parTaka: " + parTaka 
@@ -86,11 +73,9 @@ public class Kentta {
     
     public void tulosta(OutputStream os) {
         tulosta(new PrintStream(os));
-    }
-    
+    }    
     
     public static void main(String[] args) {
-
         Kentta Jes = new Kentta();
         Kentta Toinen = new Kentta();
         Jes.rekisteroi();
@@ -99,7 +84,6 @@ public class Kentta {
         Toinen.tulosta(System.out);
         Jes.vastaaKentta(2);
         Jes.tulosta(System.out);
-
     }
 
 }

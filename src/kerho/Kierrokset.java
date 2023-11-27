@@ -22,25 +22,31 @@ public class Kierrokset implements Iterable<Kierros> {
     private final Collection<Kierros> alkiot = new ArrayList<Kierros>();
 
 
-
     public Kierrokset() {
         //
     }
     
+    /*
+     * Palauttaa kierroksen indeksistä.
+     */
     public Kierros anna(int indeksi) {
         if (indeksi >= 0 && indeksi < alkiot.size()) {
             return new ArrayList<>(alkiot).get(indeksi);
         }
         return null;
+    }    
 
-    }
-    
-
+    /*
+     * Lisää uuden kierroksen.
+     */
     public void lisaa(Kierros runi) {
         alkiot.add(runi);
         muutettu = true;
     }
 
+    /*
+     * Palauttaa tallennustiedoston nimen.
+     */
     public String getTiedostonNimi() {
         if (!tiedostonPerusNimi.endsWith(".dat")) {
             return tiedostonPerusNimi + ".dat";
@@ -55,17 +61,18 @@ public class Kierrokset implements Iterable<Kierros> {
     public void setTiedostonPerusNimi(String tied) {
         tiedostonPerusNimi = tied;
     }
-
     
     public int getKierrostenLkm() {
         return alkiot.size();
-    }
-    
+    }    
 
     public String getBakNimi() {
         return tiedostonPerusNimi + ".bak";
     }
     
+    /*
+     * Lukee kierrokset tiedostosta.
+     */
     public void lueTiedostosta(String tied) throws SailoException {
         setTiedostonPerusNimi(tied);
         File tiedosto = new File(getTiedostonNimi()); // 
@@ -83,17 +90,21 @@ public class Kierrokset implements Iterable<Kierros> {
         }catch (IOException e) {
             throw new SailoException("Ongelmia tiedoston kanssa: " + e.getMessage());
         }
-
     }    
     
+    /**
+     * Lukee kierrokset tiedostosta.
+     * @throws SailoException
+     */
     public void lueTiedostosta() throws SailoException {
         lueTiedostosta(getTiedostonNimi());
-    }
+    }    
     
-    
+    /*
+     * Poistaa kyseisen kierroksen.
+     */
     public boolean poista(Kierros poistettavaKierros) {
         if (poistettavaKierros == null) return false;
-        
         boolean poistettu = false;
         Iterator<Kierros> iteraattori = alkiot.iterator();
         while (iteraattori.hasNext()) {
@@ -105,9 +116,11 @@ public class Kierrokset implements Iterable<Kierros> {
             }
         }
         return poistettu;
-    }
-    
+    }    
 
+    /*
+     * Tallentaa kierrokset jos muutoksia tapahtuu.
+     */
     public void tallenna() throws SailoException {
         if(!muutettu) return;   
         File fbak = new File(getBakNimi());
@@ -125,20 +138,24 @@ public class Kierrokset implements Iterable<Kierros> {
         throw new SailoException ("Tiedoston " + ftied.getName() + " kirjoittaminen ei onnistunut.");
     }
         muutettu = false;
-        
     }
-
 
     public int getLkm() {
         return alkiot.size();
     }
 
+    /*
+     * Iteraattori kierrosten käymiseen läpi.
+     */
     @Override
     public Iterator<Kierros> iterator() {
         return alkiot.iterator();
-    }
+    }    
     
-    
+    /*
+     * Palauttaa listalla jäsenen kierrokset
+     * tunnusnumeroon perustuen.
+     */
     public List<Kierros> annaKierrokset(int tunnusnro) {
         List<Kierros> loydetyt = new ArrayList<Kierros>();
         for (Kierros runi : alkiot)
@@ -153,29 +170,20 @@ public class Kierrokset implements Iterable<Kierros> {
             rundit.lueTiedostosta();
         } catch (SailoException ex) {
             System.err.println(ex.getMessage());
-        }
-        
+        }        
         Kierros rundi1 = new Kierros();
-        rundit.lisaa(rundi1);    
-        
+        rundit.lisaa(rundi1); 
         List<Kierros> kierrokset2 = rundit.annaKierrokset(1);
 
         for (Kierros runi : kierrokset2) {
             System.out.print(runi.getJasenNro() + " ");
             runi.tulosta(System.out);
-        }
-        
+        }        
         try {
             rundit.tallenna();
             
         } catch (SailoException e) {
             e.printStackTrace();
         }
-
-        
-        
     }
-
-
-
 }

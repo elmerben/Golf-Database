@@ -34,14 +34,27 @@ public class LisaaTulosGUIController {
     
     private Button peruutaTulos;    
     
+    /**
+     * Asettaa annetun jäsenen.
+     * @param jasen Asetettava jäsen.
+     */
     public void setJasen(Jasen jasen) {
         this.jasen = jasen;
     }
     
+    /**
+     * Asettaa klubben-olion
+     * @param klubben Asetettava olio.
+     */
     public void setKlubben(Klubben klubben) {
         this.klubben = klubben;
     }    
     
+    /**
+     * Käsittelee tuloksen yhteydessä
+     * tallentamisen peruutuksen.
+     * @param event Tapahtuma.
+     */
     @FXML
     void handlePeruutaTulos(ActionEvent event) {
         Node source = (Node) event.getSource();
@@ -51,6 +64,12 @@ public class LisaaTulosGUIController {
         stage.close();
     }
 
+
+    /**
+     * Käsittelee uuden tuloksen tallennuksen ja 
+     * tallentaa tiedot klubben-olioon
+     * @param event Tapahtuma.
+     */
     @FXML
     void handleTallennaTulos(ActionEvent event) {
         try {
@@ -70,16 +89,12 @@ public class LisaaTulosGUIController {
             Stage stage = (Stage) source.getScene().getWindow();
 
             stage.close();
-            
-
         } catch (NumberFormatException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-
 }
 
 
