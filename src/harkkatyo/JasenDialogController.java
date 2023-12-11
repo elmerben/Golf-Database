@@ -1,7 +1,6 @@
 package harkkatyo;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
@@ -93,8 +92,9 @@ public class JasenDialogController implements ModalControllerInterface<Jasen>, I
     private TextField[] edits;
     private static Jasen apujasen = new Jasen();
     
-    /*
-     * Luo tekstikentät dialogiin. Sen jälkeen palauttaa ne.
+    /**
+     * @param gridJasen Dialogi
+     * @return Luo tekstikentät dialogiin. Sen jälkeen palauttaa ne.
      */
     public static TextField[] luoKentat(GridPane gridJasen) {
         gridJasen.getChildren().clear();
@@ -125,7 +125,9 @@ public class JasenDialogController implements ModalControllerInterface<Jasen>, I
             }
     }    
     
-    /*
+    /**
+     * @param edits tekstikenttä
+     * @param jasen valittu jäsen
      * Näyttää jäsenen tiedot tekstikentissä.
      */
     public static void naytaJasen(TextField[] edits, Jasen jasen) {
@@ -135,8 +137,14 @@ public class JasenDialogController implements ModalControllerInterface<Jasen>, I
         }
     }
     
-    /*
-     * Palauttaa kentän tunnuksen.
+
+    /**
+     * Etsii ja palauttaa kentän tunnusnumeron annetusta objektista.
+     * Jos objekti ei ole Node-tyyppinen tai tunnusnumeroa ei löydy, palauttaa oletusarvon.
+     * @param obj Objekti, josta tunnusnumeroa etsitään. Yleensä TextField tai muu käyttöliittymäelementti.
+     * @param oletus Oletusarvo tunnusnumerolle, joka palautetaan, jos tunnusnumeroa ei voida päätellä.
+     * @return Kentän tunnusnumero tai oletusarvo, jos tunnusnumeroa ei löydy.
+
      */
     public static int getFieldId(Object obj, int oletus) {
         if ( !(obj instanceof Node)) return oletus;
@@ -179,8 +187,12 @@ public class JasenDialogController implements ModalControllerInterface<Jasen>, I
         }
     }    
     
-    /*
-     * Näyttää dialogin jäsenen kysymiseen.
+
+    /**
+     * Näyttää dialogin jäsenen tietojen kysymiseen tai muokkaamiseen.
+     * @param modalityStage Määrittää, mihin ikkunaan dialogi sidotaan (voidaan käyttää null, jos ei sidota).
+     * @param oletus Jäsen, jonka tiedot näytetään dialogissa oletusarvoina. Jos null, luodaan uusi jäsen.
+     * @return Palauttaa dialogissa muokatun jäsenen, tai null, jos dialogi peruutetaan.
      */
     public static Jasen kysyJasen(Stage modalityStage, Jasen oletus) {
        return ModalController.showModal(KlubbenGUIController.class.getResource("LisaaPelaajaGUIView.fxml"), "Jäsen", modalityStage, oletus);

@@ -1,9 +1,7 @@
  package harkkatyo;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.stage.Stage;
-import kerho.Jasen;
 import kerho.Klubben;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -25,7 +23,6 @@ public class HarkkaMain extends Application {
             final KlubbenGUIController KlubbenCtrl = (KlubbenGUIController)ldr.getController();
             
             final Scene scene = new Scene(root);
-            //Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("harkka.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.setTitle("Golf-Klubben");

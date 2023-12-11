@@ -12,6 +12,11 @@ import kerho.Jasen;
 import kerho.Kierros;
 import kerho.Klubben;
 
+/**
+ * @author elias
+ * @version 11.12.2023
+ *
+ */
 public class LisaaTulosGUIController {
     
     @FXML

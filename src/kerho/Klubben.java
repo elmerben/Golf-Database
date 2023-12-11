@@ -3,6 +3,11 @@ package kerho;
 import java.io.File;
 import java.util.List;
 
+/**
+ * @author elias
+ * @version 11.12.2023
+ *
+ */
 public class Klubben {
 
     
@@ -10,43 +15,55 @@ public class Klubben {
     private Kierrokset kierrokset = new Kierrokset();
     private String hakemisto = "data";
     
+    /**
+     * @return palauttaa jasenet-lukumäärän.
+     */
     public int getJasenia() {
         return jasenet.getLkm();
     }
     
+    /**
+     * @param i haettu jäsen
+     * @return palauttaa jäsenen tiedot Jäsenet-luokasta.
+     */
     public Jasen annaJasen(int i) {
         return jasenet.anna(i);
     }
     
-    /*
-     * Palauttaa jäsenen indeksin perusteella.
+    /**
+     * @param jasen palauttaa jäsenen indeksin perusteella.
      */
-    public void lisaa(Jasen jasen) throws SailoException {
+    public void lisaa(Jasen jasen) {
         jasenet.lisaa(jasen);
     }
     
     /*
      * Lisää jäsenen.
      */
+    /**
+     * @param rundi lisää kierroksen
+     */
     public void lisaa(Kierros rundi) {
         kierrokset.lisaa(rundi);
     }
     
-    /*
-     * Joko korvaa tai lisää jäsenen.
+    /**
+     * @param jasen Korvaa tai lisää jäsenen
      */
-    public void korvaaTaiLisaa(Jasen jasen) throws SailoException {
+    public void korvaaTaiLisaa(Jasen jasen) {
         jasenet.korvaaTaiLisaa(jasen);
     }
     
-    /*
-     * Palauttaa annetun jäsenen kierrokset.
+    /**
+     * @param jasen Jasen-olio
+     * @return palauttaa annetun jäsenen kierrokset
      */
     public List<Kierros> annaKierrokset(Jasen jasen) {
         return kierrokset.annaKierrokset(jasen.getTunnusNro());
     }
     
-    /*
+    /**
+     * @param nimi tiedoston nimi.
      * Asettaa tiedostosijainnin.
      */
     public void setTiedosto(String nimi) {
@@ -58,8 +75,9 @@ public class Klubben {
         kierrokset.setTiedostonPerusNimi(hakemistonNimi + "kierrokset");
     } 
     
-    /*
-     * Lataa jäsenen, sekä kierroksen tiedot kustakin tiedostoista.
+    /**
+     * @throws SailoException epäonnistuessa heittää poikkeuksen.
+     * Muutoin lataa jäsenen ja kierroksen kustakin tiedostosta.
      */
     public void lataa() throws SailoException {
         jasenet = new Jasenet();
@@ -68,8 +86,10 @@ public class Klubben {
         kierrokset.lueTiedostosta();
     }
     
-    /*
-     * Poistaa annetun kierroksen tiedostosta.
+    /**
+     * @param poistettavaKierros poistettava kierros.
+     * @throws SailoException virheenkäsittely
+     * Poistaa kierroksen tiedostoista.
      */
     public void poistaKierros(Kierros poistettavaKierros) throws SailoException {
         if (poistettavaKierros == null) return;
@@ -78,15 +98,16 @@ public class Klubben {
         kierrokset.tallenna();
     }
     
-    /*
-     * Poistaa sekä jäsenen, että häneen liitetyt
-     * kierrokset tiedostoista.
+    /**
+     * @param poistettavaJasen Jäsen, keneltä poistetaan.
+     * @throws SailoException virheenkäsittely.
+     * Poistaa sekä jäsenen, että häneen liitetyt kierrokset tiedostoista.
      */
     public void poistaJasen(Jasen poistettavaJasen) throws SailoException {
         if (poistettavaJasen == null) return;
         
-        List<Kierros> kierrokset = annaKierrokset(poistettavaJasen);
-        for (Kierros kierros : kierrokset) {
+        List<Kierros> poistettavatKierrokset = annaKierrokset(poistettavaJasen);
+        for (Kierros kierros : poistettavatKierrokset) {
             this.kierrokset.poista(kierros);
         }       
         boolean poistettu = jasenet.poista(poistettavaJasen);
@@ -94,9 +115,10 @@ public class Klubben {
         jasenet.tallenna();        
     }    
     
-    /*
-     * Lataa jäsenen, sekä kierrosten tiedot
-     * tiedostosta.
+    /**
+     * @param nimi Jäsenen tiedot.
+     * @throws SailoException virheenkäsittely.
+     * Lataa jäsenen, sekä kierrosten tiedot tiedostosta.
      */
     public void lueTiedostosta(String nimi) throws SailoException {
         File dir = new File(nimi);
@@ -111,7 +133,8 @@ public class Klubben {
         
     }    
     
-    /*
+    /**
+     * @throws SailoException Virheenkäsittely
      * Tallentaa jäsentiedot, sekä kierrostiedot tiedostoon.
      */
     public void tallenna() throws SailoException {
@@ -130,6 +153,9 @@ public class Klubben {
         
     } 
     
+    /**
+     * @param args Pääohjelma.
+     */
     public static void main(String[] args) {
         Klubben klubben = new Klubben();
         

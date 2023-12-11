@@ -6,6 +6,11 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import fi.jyu.mit.fxgui.*;
+/**
+ * @author elias
+ * @version 11.12.2023
+ *
+ */
 public class LisaaPelaajaGUIController {
 
     //@FXML
@@ -27,7 +32,7 @@ public class LisaaPelaajaGUIController {
     private Button tallenna;
 
     @FXML
-    void keyPressed(KeyEvent event) {
+    void keyPressed(@SuppressWarnings("unused") KeyEvent event) {
         Dialogs.showMessageDialog("Ei tapahdu mitään.");
 
     }

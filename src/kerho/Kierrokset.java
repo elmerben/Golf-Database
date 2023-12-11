@@ -1,18 +1,20 @@
 package kerho;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.*;
 
 
 
+/**
+ * @author elias
+ * @version 11.12.2023
+ * Kierrokset-luokka.
+ */
 public class Kierrokset implements Iterable<Kierros> {
 
     
@@ -22,12 +24,16 @@ public class Kierrokset implements Iterable<Kierros> {
     private final Collection<Kierros> alkiot = new ArrayList<Kierros>();
 
 
+    /**
+     * Konstruktori.
+     */
     public Kierrokset() {
         //
     }
     
-    /*
-     * Palauttaa kierroksen indeksistä.
+    /**
+     * @param indeksi valittu indeksi
+     * @return Palauttaa kierroksen indeksistä.
      */
     public Kierros anna(int indeksi) {
         if (indeksi >= 0 && indeksi < alkiot.size()) {
@@ -36,16 +42,16 @@ public class Kierrokset implements Iterable<Kierros> {
         return null;
     }    
 
-    /*
-     * Lisää uuden kierroksen.
+    /**
+     * @param runi lisää uuden kierroksen.
      */
     public void lisaa(Kierros runi) {
         alkiot.add(runi);
         muutettu = true;
     }
 
-    /*
-     * Palauttaa tallennustiedoston nimen.
+    /**
+     * @return Palauttaa tallennustiedoston nimen
      */
     public String getTiedostonNimi() {
         if (!tiedostonPerusNimi.endsWith(".dat")) {
@@ -54,23 +60,37 @@ public class Kierrokset implements Iterable<Kierros> {
         return tiedostonPerusNimi;  
     }
     
+    /**
+     * @return asettaa tiedoston nimen.
+     */
     public String setSheesh() {
         return tiedostonPerusNimi;
     }
     
+    /**
+     * @param tied asettaa tiedostonimen,
+     */
     public void setTiedostonPerusNimi(String tied) {
         tiedostonPerusNimi = tied;
     }
     
+    /**
+     * @return palauttaa alkioiden lukumäärän.
+     */
     public int getKierrostenLkm() {
         return alkiot.size();
     }    
 
+    /**
+     * @return palauttaa varmuuskopiotiedostonimen.
+     */
     public String getBakNimi() {
         return tiedostonPerusNimi + ".bak";
     }
     
-    /*
+    /**
+     * @param tied tiedostonimi.
+     * @throws SailoException Virhekäsittely.
      * Lukee kierrokset tiedostosta.
      */
     public void lueTiedostosta(String tied) throws SailoException {
@@ -94,14 +114,15 @@ public class Kierrokset implements Iterable<Kierros> {
     
     /**
      * Lukee kierrokset tiedostosta.
-     * @throws SailoException
+     * @throws SailoException Heittää poikkeuksen virheestä.
      */
     public void lueTiedostosta() throws SailoException {
         lueTiedostosta(getTiedostonNimi());
     }    
     
-    /*
-     * Poistaa kyseisen kierroksen.
+    /**
+     * @param poistettavaKierros kierros, joka poistetaan.
+     * @return Poistaa kyseisen kierroksen.
      */
     public boolean poista(Kierros poistettavaKierros) {
         if (poistettavaKierros == null) return false;
@@ -118,7 +139,8 @@ public class Kierrokset implements Iterable<Kierros> {
         return poistettu;
     }    
 
-    /*
+    /**
+     * @throws SailoException Virhekäsittely.
      * Tallentaa kierrokset jos muutoksia tapahtuu.
      */
     public void tallenna() throws SailoException {
@@ -140,6 +162,9 @@ public class Kierrokset implements Iterable<Kierros> {
         muutettu = false;
     }
 
+    /**
+     * @return palauttaa alkioiden lkm.
+     */
     public int getLkm() {
         return alkiot.size();
     }
@@ -152,8 +177,9 @@ public class Kierrokset implements Iterable<Kierros> {
         return alkiot.iterator();
     }    
     
-    /*
-     * Palauttaa listalla jäsenen kierrokset
+    /**
+     * @param tunnusnro etsitään tunnusnumeron perusteella.
+     * @return Palauttaa listalla jäsenen kierrokset
      * tunnusnumeroon perustuen.
      */
     public List<Kierros> annaKierrokset(int tunnusnro) {
@@ -163,6 +189,9 @@ public class Kierrokset implements Iterable<Kierros> {
         return loydetyt;
     }
 
+    /**
+     * @param args mainfunktio.
+     */
     public static void main(String[] args) {
         Kierrokset rundit = new Kierrokset();
         

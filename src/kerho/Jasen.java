@@ -5,7 +5,6 @@ import java.io.PrintStream;
 
 import fi.jyu.mit.ohj2.Mjonot;
 import kanta.HcpTarkistus;
-import kanta.tunnusTarkistus;
 
 /**
  * Jäsen-luokka kuvaa kerhon jäsentä.
@@ -30,23 +29,25 @@ public class Jasen implements Cloneable {
     public int hashCode() {
         return tunnusNro;
     }
-    /*
-     * Palauttaa jäsenen tietokenttien lukumäärän.
+    /**
+     * @return Palauttaa jäsenen tietokenttien lukumäärän.
      */
     public int getKenttia() {
         return 4;
     }
     
-    /*
-     * Asettaa jäsenelle nimen ja palauttaa null jos asettaminen onnistui.
+    /**
+     * @param s Valittu jäsen.
+     * @return Asettaa jäsenelle nimen ja palauttaa null jos asettaminen onnistui.
      */
     public String setNimi(String s) {
         nimi = s;
         return null;        
     }
 
-    /*
-     * Vertaa jäsentä toiseen jäseneen käyden jokaisen kentän läpi.
+    /**
+     * @param jasen Valittu jäsen
+     * @return Vertaa jäsentä toiseen jäseneen käyden jokaisen kentän läpi.
      */
     public boolean equals(Jasen jasen) {
         if ( jasen == null ) return false;
@@ -63,22 +64,23 @@ public class Jasen implements Cloneable {
         return false;
     }
     
-    /*
-     * Palauttaa jäsenen nimen.
+    /**
+     * @return Palauttaa jäsenen nimen.
      */
     public String getNimi() {
         return this.nimi;
     }
     
-    /*
-     * Palauttaa ensimmäisen kentän indeksin.
+    /**
+     * @return Palauttaa ensimmäisen kentän indeksin.
      */
     public int ekaKentta() {
         return 1;
     }
     
-    /*
-     * Palauttaa kysymyksen, joka liittyy kunkin kentän indeksiin.
+    /**
+     * @param k annettu kenttä
+     * @return Palauttaa kysymyksen, joka liittyy kunkin kentän indeksiin.
      */
     public String getKysymys(int k) {
         switch (k) {
@@ -90,8 +92,9 @@ public class Jasen implements Cloneable {
         }
     }
 
-    /*
-     * Palauttaa annetun kentän arvon.
+    /**
+     * @param k Annettu kenttä
+     * @return Annetun kentän arvo
      */
     public String anna(int k) {
         switch (k) {
@@ -105,9 +108,11 @@ public class Jasen implements Cloneable {
     
     private HcpTarkistus tasurit = new HcpTarkistus();
     
-    /*
-     * Asettaa annetun kentän arvoksi merkkijonon ja virheen kohdalla
-     * palauttaa virheen.
+    /**
+     * @param k annettu kenttä
+     * @param jono annettu merkkijono
+     * @return Palauttaa annetun kentän arvoksi merkkijonon
+     * ja virheen kohdalla virheen.
      */
     public String aseta(int k, String jono) {
         String tjono = jono.trim();
@@ -202,28 +207,38 @@ public class Jasen implements Cloneable {
     
     /**
      * Tulostaa jäsenen tiedot Outputsream-olioon.
+     * @param os OutputStream-olio.
      */
     public void tulosta(OutputStream os) {
         tulosta(new PrintStream(os));
     }    
 
-    /*
-     * Palauttaa jäsenen seuran.
+    /**
+     * @return Palauttaa jäsenen seuran
      */
     public String getSeura() {
         return kotiseura;
     }
     
-    /*
-     * Palauttaa tasoituksen.
+    /**
+     * @return Palauttaa tasoituksen.
      */
     public String getHcp() {
         return tasoitus;
     }    
 
-    /*
-     * Antaa jäsenelle uuden tasoituksen sekä 
+    /**
+     * @param s Asetettu tasoitus.
+     * @return Antaa jäsenelle uuden tasoituksen sekä 
      * tarvittaessa palauttaa virheen 
+     * Testaa Jasen-luokan setHcp-metodia.
+     * @example
+     * <pre name="test">
+     *   Jasen jasen = new Jasen();
+     *   jasen.setHcp("36.0") === null;
+     *   Jasen jasen2 = new Jasen();
+     *   jasen2.setHcp("10.0") === null;
+     * </pre>
      */
     public String setHcp(String s) {
         HcpTarkistus tarkistaja = new HcpTarkistus();
@@ -247,8 +262,8 @@ public class Jasen implements Cloneable {
         aku2.tulosta(System.out);
     }    
 
-    /*
-     * Lukee jäsenen tiedot merkkijonosta.
+    /**
+     * @param rivi Lukee jäsenen tiedot merkkijonosta.
      */
     public void parse(String rivi) {
         StringBuffer sb = new StringBuffer(rivi);

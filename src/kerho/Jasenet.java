@@ -2,18 +2,18 @@ package kerho;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 
+/**
+ * @author elias
+ * @version 11.12.2023
+ * Jasenet-luokka.
+ */
 public class Jasenet {
     
     
@@ -27,6 +27,9 @@ public class Jasenet {
     
     int lkm = 0;    
 
+    /**
+     * @param args main-metodi.
+     */
     public static void main(String[] args) {
         Jasenet jasenet = new Jasenet();
         try {
@@ -46,14 +49,17 @@ public class Jasenet {
         }
     }
     
-    /*
+    /**
+     * @throws SailoException virheenkäsittely. 
      * Lukee jäsenten tiedot tiedostosta.
      */
     public void lueTiedostosta() throws SailoException {
         lueTiedostosta(getTiedostonPerusNimi());
     }    
     
-    /*
+    /**
+     * @param tied Tiedoston nimi
+     * @throws SailoException Virheenkäsittely
      * Lukee jäsenen tiedot parametrina annetun tiedoston nimestä.
      */
     public void lueTiedostosta(String tied) throws SailoException {        
@@ -81,8 +87,9 @@ public class Jasenet {
         }
         }       
     
-    /*
-     *  Poistaa jäsenen listalta jos jäsen löytyy.
+    /**
+     * @param poistettavaJasen poistettava jäsen.
+     * @return Poistaa jäsenen listalta jos jäsen löytyy.
      */
     public boolean poista(Jasen poistettavaJasen) {
         if (poistettavaJasen == null) return false;
@@ -104,11 +111,15 @@ public class Jasenet {
         return true;
     } 
     
+    /**
+     * @throws SailoException Virheenkäsittely.
+     */
     public void talleta() throws SailoException {
         tallenna();
     }    
     
-    /*
+    /**
+     * @throws SailoException Virheenkäsittely.
      * Tallentaa jäsenen tiedot muutoksien yhteydessä.
      */
     public void tallenna() throws SailoException {
@@ -135,24 +146,37 @@ public class Jasenet {
         
     }
     
+    /**
+     * @return palauttaa varmuustiedoston nimen.
+     */
     public String getBakNimi() {
         return tiedostonPerusNimi + ".bak";
     }
+    /**
+     * @return Palauttaa tiedostonimen.
+     */
     public String getTiedostonNimi() {
         return getTiedostonPerusNimi() + ".dat";
     }
     
+    /**
+     * @return Palauttaa koko nimen.
+     */
     public String getKokoNimi() {
         return kokoNimi;
     }
     
+    /**
+     * @param nimi asettaa tiedoston nimen.
+     */
     public void setTiedostonPerusNimi(String nimi) {
         tiedostonPerusNimi = nimi;
     }
     
     
-    /*
-     * Lisää jäsenen listaan.
+    /**
+     * @param jasen käsiteltävä jäsen.
+     *  Lisää jäsenen listaan.
      */
     public void lisaa(Jasen jasen) {
         if ( lkm >= alkiot.length) alkiot = Arrays.copyOf(alkiot, lkm + 20);
@@ -161,7 +185,8 @@ public class Jasenet {
         muutettu = true;
     }
     
-    /*
+    /**
+     * @param jasen käsiteltävä jäsen.
      * Korvaa annetun jäsene listassa tai lisää, jos jäsentä
      * ei vielä ole olemassa.
      */
@@ -177,8 +202,13 @@ public class Jasenet {
         lisaa(jasen); 
     }
     
+    /**
+     * @param i käsiteltävä muuttuja.
+     * @return Palauttaa tietyssä indeksissä olevan jäsenen.
+     * @throws IndexOutOfBoundsException laittoman indeksin virhekäsittely.
+     */
     /*
-     * Palauttaa tietyssä indeksissä olevan jäsenen.
+     * 
      */
     public Jasen anna(int i) throws IndexOutOfBoundsException {
         if (i < 0 || this.lkm <= i)
@@ -186,17 +216,23 @@ public class Jasenet {
         return alkiot[i];
     }
     
-    /*
+    /**
      * Konstruktori.
      */
     public Jasenet() {
         alkiot = new Jasen[MAX_JASENIA];
     }
         
+    /**
+     * @return palauttaa tiedostonimen.
+     */
     public String getTiedostonPerusNimi() {
         return tiedostonPerusNimi;
     }
 
+    /**
+     * @return Palauttaa lukumäärän.
+     */
     public int getLkm() {
         return lkm;
     }

@@ -7,10 +7,9 @@ import org.junit.platform.suite.api.Suite;
  * @author elias
  * @version 27.4.2023
  * Testien ajamista.
- * ijdia
  */
 @Suite
-@SelectClasses({ JasenTest.class })
+@SelectClasses({ JasenTest.class, KierrosTest.class })
 public class AllTests {
   // Ajetaan kaikki testit
 }

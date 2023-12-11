@@ -69,6 +69,7 @@
             <MenuItem mnemonicParsing="false" onAction="#handleLisaaTulos" text="Lisää tulos" />
             <MenuItem mnemonicParsing="false" onAction="#handleLisaaPelaaja" text="Lisää pelaaja" />
                   <MenuItem mnemonicParsing="false" onAction="#handleTulostaTulos" text="Tulosta.." />
+                  <MenuItem mnemonicParsing="false" onAction="#handleEtsiKenttaLyhenne" text="Etsi kenttälyhenne..." />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Poistu" />
           </items>

@@ -14,7 +14,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -26,9 +25,15 @@ import kerho.Klubben;
 import kerho.SailoException;
 import fi.jyu.mit.fxgui.*;
 
+import java.awt.Desktop;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URI;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -71,10 +76,10 @@ public class KlubbenGUIController implements Initializable {
     @FXML private ListChooser<Jasen> chooserJasenet;
     
 
-    @FXML
-    void keyPressed(KeyEvent event) {
-        Dialogs.showMessageDialog("Voitit pelin");
-    }
+//    @FXML
+//    void keyPressed(KeyEvent event) {
+//        Dialogs.showMessageDialog("Voitit pelin");
+//    }
 
     /*
      * Alustus.
@@ -88,6 +93,14 @@ public class KlubbenGUIController implements Initializable {
         hakuKentta.textProperty().addListener((obs, vanhaArvo, uusiArvo) -> suoritaHaku(uusiArvo));
     }
 
+    @FXML
+    void handleEtsiKenttaLyhenne(ActionEvent event) {
+        etsiLyhenne();
+    }
+
+    
+    
+    
     @FXML
     void handleTulostaTulos(ActionEvent event) {
         tulostaTiedot();
@@ -141,6 +154,20 @@ public class KlubbenGUIController implements Initializable {
     
    // _____________________________________________________
     
+    /*
+     * Käyttäjän painaessa nappia funktio avaa oletusselaimen
+     * kautta internet-sivun, jossa on listattuna eri kenttien
+     * lyhenteet.
+     */
+    private void etsiLyhenne() {
+        try {
+            Desktop desktop = Desktop.getDesktop();
+            URI osoite = new URI("https://golfpiste.com/seuratunnukset/");
+            desktop.browse(osoite);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
     /*
      * Funktio, joka tekee uuden ikkunan ja tulostaa siihen valitun
@@ -215,8 +242,8 @@ public class KlubbenGUIController implements Initializable {
         hae(0);        
     }    
     
-    /*
-     * Lataa kerhon tiedot tiedostosta.
+    /**
+     * @param nimi Lataa kerhon tiedot tiedostosta.
      */
     protected void lueTiedosto(String nimi) {
         kerhonnimi = nimi;
@@ -242,7 +269,8 @@ public class KlubbenGUIController implements Initializable {
 
     }
     
-    /*
+
+    /**
      * Näyttää valitun jäsenen tiedot käyttöliittymässä.
      */
     protected void naytaJasen() {
@@ -266,11 +294,7 @@ public class KlubbenGUIController implements Initializable {
         }
         jasen = JasenDialogController.kysyJasen(null, jasen);
         if (jasen == null) return;
-        try {
         klubben.korvaaTaiLisaa(jasen);
-        } catch (SailoException e) {
-            //
-        }
         hae(jasen.getTunnusNro());
     }
     
@@ -281,11 +305,34 @@ public class KlubbenGUIController implements Initializable {
         tableKierrokset.clear();
         if(jasen == null) return;
         List<Kierros> kierrokset = klubben.annaKierrokset(jasen);
-        if(kierrokset.size() == 0) return;
+        Collections.sort(kierrokset, new Comparator<Kierros>() {
+            @Override
+            public int compare(Kierros k1, Kierros k2) {
+                String uusiMuotoPvm1 = pvmMuotoVaihto(k1.getPvm());
+                String uusiMuotoPvm2 = pvmMuotoVaihto(k2.getPvm());
+
+                LocalDate pvm1 = LocalDate.parse(uusiMuotoPvm1);
+                LocalDate pvm2 = LocalDate.parse(uusiMuotoPvm2);
+                return pvm1.compareTo(pvm2);
+            }
+
+            private String pvmMuotoVaihto(String alkuperainenPvm) {
+                if (alkuperainenPvm == null || alkuperainenPvm.isEmpty()) {
+                    return "";
+                }
+                String[] osat = alkuperainenPvm.split("\\.");
+                if (osat.length < 3) {
+                    return alkuperainenPvm;
+                }
+                return osat[2] + "-" + osat[1] + "-" + osat[0];
+            }
+        });
+
+        if (kierrokset.size() == 0) return;
         for (Kierros kie : kierrokset)
             naytaKierros(kie);
     }
-    
+
     /*
      * Näyttää tiedot koskien yksittäistä kierrosta.
      */
@@ -294,8 +341,10 @@ public class KlubbenGUIController implements Initializable {
         tableKierrokset.add(kie, rivi);
     }
     
-    /*
-     * Tulostaa valitun jäsenen tiedot.
+    /**
+     * Tulostaa valitun jäsenen tiedot
+     * @param os PrintStream tyyppi
+     * @param jasen Valittu jäsen
      */
     public void tulosta(PrintStream os, final Jasen jasen) {
         os.println("-----------------------");
@@ -308,17 +357,23 @@ public class KlubbenGUIController implements Initializable {
     }
     
     
+    /**
+     * @param klubben alustaa kerhon.
+     */
     public void setKerho(Klubben klubben) {
         this.klubben = klubben;
         naytaJasen();
     }    
     
     
+    /**
+     * Kentän lisäämisen funktio.
+     */
     public void LisaaKentta() {
         Dialogs.showMessageDialog("Lisää kenttä");
     }
 
-    /*
+    /**
      * Avaa ikkunan tuloksen lisäämistä varten.
      */
     public void uusiTulos() {
@@ -344,7 +399,8 @@ public class KlubbenGUIController implements Initializable {
         }
     }
     
-    /*
+
+    /**
      * Peruutustoiminto.
      */
     public void peruuta() {
@@ -352,7 +408,7 @@ public class KlubbenGUIController implements Initializable {
 
     }
     
-    /*
+    /**
      * Tallennustoiminto.
      */
     public void tallenna() {
@@ -363,24 +419,22 @@ public class KlubbenGUIController implements Initializable {
         }
     }
     
-    /*
-     * Uuden jäsenen lisäämisen toiminto.
+
+    /**
+     *  Uuden jäsenen lisäämisen toiminto.
      */
     public void uusiPelaaja() {
         Jasen uusi = new Jasen();
         uusi = JasenDialogController.kysyJasen(null, uusi);
         if ( uusi == null) return;
         uusi.rekisteroi();
-        try {
-            klubben.lisaa(uusi);
-        } catch (SailoException e) {
-            Dialogs.showMessageDialog("Ongelmia uuden luomisessa " + e.getMessage());
-            return;
-        }
+        klubben.lisaa(uusi);
         hae(uusi.getTunnusNro());
     }   
     
-    /*
+
+    /**
+     * @return Palauttaa totuusarvon.
      * Tarkistaa voiko sovelluksen sulkea ja tallentaa tiedot 
      * ennen sen sulkemista.
      */
@@ -404,7 +458,7 @@ public class KlubbenGUIController implements Initializable {
          chooserJasenet.setSelectedIndex(index);
         }    
     
-    /*
+    /**
      * Lisää uuden jäsenen.
      */
     protected void uusiJasen() {
@@ -412,11 +466,7 @@ public class KlubbenGUIController implements Initializable {
         uusi = JasenDialogController.kysyJasen(null, uusi);
         if(uusi == null) return;
         uusi.rekisteroi();
-        try {
-            klubben.lisaa(uusi);
-        } catch (SailoException e) {
-            Dialogs.showMessageDialog("Ongelmia uuden luomisessa " + e.getMessage());            
-        }
+        klubben.lisaa(uusi);
         hae(uusi.getTunnusNro());
     }
 }

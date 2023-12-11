@@ -8,11 +8,19 @@ import java.io.PrintStream;
 import java.util.*;
 
 
+/**
+ * @author elias
+ * @version 11.12.2023
+ * Kentät-luokka.
+ */
 public class Kentat implements Iterable<Kentta> {
 
     private Collection<Kentta> alkiot = new ArrayList<Kentta>();
     private String tiedostonNimi = "";
     
+    /**
+     * Konstruktori.
+     */
     public Kentat() {
         //
     }

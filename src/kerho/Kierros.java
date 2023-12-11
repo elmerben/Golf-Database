@@ -5,9 +5,12 @@ import java.io.*;
 
 import fi.jyu.mit.ohj2.Mjonot;
 
-import static kanta.tunnusTarkistus.rand;
 
-
+/**
+ * @author elias
+ * @version 11.12.2023
+ * Kierros-luokka.
+ */
 public class Kierros {
 
     private int pelaajaNro;
@@ -23,36 +26,76 @@ public class Kierros {
 
     
     
+    /**
+     * @param pelaajaNro pelaajan pelaajanumero.
+     */
     public void setPelaajaNro(int pelaajaNro) {
         this.pelaajaNro = pelaajaNro;
     }
     
+    /**
+     * @param pvm Asettaa päivämäärän.
+     */
     public void setPvm(String pvm) {
         this.pvm = pvm;
     }
 
+    /**
+     * @return Palauttaa kierroksen päivämäärän merkkijonona.
+     */
+    public String getPvm() {
+        return this.pvm;
+    }
+
+    /**
+     * @param tulosEtu etuysin tulos.
+     */
     public void setTulosEtu(int tulosEtu) {
         this.tulosEtu = tulosEtu;
         laskeYhteistulos();
     }
 
+    /**
+     * @param tulosTaka takaysin tulos.
+     */
     public void setTulosTaka(int tulosTaka) {
         this.tulosTaka = tulosTaka;
         laskeYhteistulos();
     }
 
+    /**
+     * @param tulosYht lyöntien yhteistulos.
+     */
     public void setTulosYht(int tulosYht) {
         this.tulosYht = tulosYht;
+    }
+    
+    /**
+     * @return palauttaa yhteistuloksen.
+     */
+    public int getTulosYht() {
+        return this.tulosYht;
     }
     
     /*
      * Laskee etuysin ja takaysin tulokset yhteen kokonaistulokseksi.
      */
+    /**
+     * Testaa yhteistuloksen laskentaa etu- ja takaysin tuloksille.
+     * @example
+     * <pre name="test">
+     *  Kierros kierros = new Kierros();
+     *  kierros.setTulosEtu(35);
+     *  kierros.setTulosTaka(40);
+     *  kierros.getTulosYht() === 75;
+     * </pre>
+     */
     private void laskeYhteistulos() {
         this.tulosYht = this.tulosEtu + this.tulosTaka;
     }    
     
-    /*
+    /**
+     * @param kenttaLyhenne Kentän lyhenne.
      * Asettaa lyhenteen kentälle, jonka maksimipituus
      * on kuusi merkkiä.
      */
@@ -64,14 +107,15 @@ public class Kierros {
         }
     }    
     
-    /*
+    /**
      * Konstruktori.
      */
     public Kierros() {
         //
     }
     
-    /*
+    /**
+     * @param pelaajaNro pelaajanumero.
      * Konstruktori, jossa on pelaajanumero.
      */
     public Kierros(int pelaajaNro) {
@@ -82,12 +126,15 @@ public class Kierros {
     /*
      * Asettaa kierrokselle tunnusnumeron.
      */
+    @SuppressWarnings("unused")
     private void setTunnusNro(int nr) {
         kierrostunnus = nr;
         if ( kierrostunnus >= seuraavaNro ) seuraavaNro = kierrostunnus + 1;
     }
     
-    /*
+
+    /**
+     * @param rivi Kierroksen tiedot.
      * Jäsentelee sopivaksi tiedot merkkijonon perusteella.
      */
     public void parse(String rivi) {        
@@ -100,12 +147,15 @@ public class Kierros {
         pelaajaNro = Mjonot.erota(sb, '|', pelaajaNro);
     }
     
+    /**
+     * @return palauttaa kenttien lukumäärän.
+     */
     public int getKenttia() {
         return 5;
     }
 
-    /*
-     * Palauttaa kunkin kierroksen tunnusnumeron.
+    /**
+     * @return palauttaa kunkin kierroksen tunnusnumeron.
      */
     public int getKierrosID() {
         int numero = seuraavaNro;
@@ -114,13 +164,14 @@ public class Kierros {
 
     }
     
-    /*
-     * Palauttaa kierroksen tiedot kunkin kentän pohjalta.
+    /**
+     * @param k Valitun kentän tiedot.
+     * @return Palauttaa kierroksen tiedot kunkin kentän pohjalta.
      */
     public String anna(int k) {
         switch (k) {
         case 0: return "" + getKierrosID();
-        case 1: return "" + PaivaM();
+        case 1: return "" + pvm;
         case 2: return "" + kierrostunnus;
         case 3: return Integer.toString(kenttaID);
         case 4: return Integer.toString(tulosYht);
@@ -136,8 +187,8 @@ public class Kierros {
         return  pvm + "|" + kenttaLyhenne + "|" + tulosEtu + "|" + tulosTaka + "|" + tulosYht + "|" + pelaajaNro ;
     }    
 
-    /*
-     * Tulostaa kierroksen.
+    /**
+     * @param out Tulostaa kierroksen.
      */
     public void tulosta(PrintStream out) {
         out.println("Päivämäärä: " + pvm);
@@ -147,12 +198,28 @@ public class Kierros {
         out.println("Tulos yhteensä: " + tulosYht); 
     }
     
+    /**
+     * @param os tulostaa kierroksen OutputStreamiin.
+     */
     public void tulosta(OutputStream os) {
         tulosta(new PrintStream(os));
     }
 
-    /*
-     * Rekisteröi kierroksen. Palauttaa myös sen tunnuksen.
+    /**
+     * @return Rekisteröi kierroksen. Palauttaa myös sen tunnuksen.
+     * Testaa Kierros-luokan rekisteroi-metodia.
+     * @example
+     * <pre name="test">
+     *   Kierros kierros1 = new Kierros();
+     *   kierros1.getTunnusNro() === 0;
+     *   kierros1.rekisteroi();
+     *   Kierros kierros2 = new Kierros();
+     *   kierros2.rekisteroi();
+     *   int n1 = kierros1.getTunnusNro();
+     *   int n2 = kierros2.getTunnusNro();
+     *   n1 === n2-1;
+     *   n2 === n1+1;
+     * </pre>
      */
     public int rekisteroi() {
         kierrostunnus = seuraavaNro;
@@ -160,14 +227,23 @@ public class Kierros {
         return kierrostunnus;
     }
 
+    /**
+     * @return palauttaa kierrostunnuksen.
+     */
     public int getTunnusNro() {
         return kierrostunnus;
     }
     
+    /**
+     * @return palauttaa jäsennumeron.
+     */
     public int getJasenNro() {
         return pelaajaNro;
     }
     
+    /**
+     * @param args pääohjelma.
+     */
     public static void main(String[] args) {
         Kierros rundi = new Kierros();
         rundi.rekisteroi();
