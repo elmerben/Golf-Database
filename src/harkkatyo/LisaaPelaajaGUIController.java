@@ -9,12 +9,10 @@ import fi.jyu.mit.fxgui.*;
 /**
  * @author elias
  * @version 11.12.2023
- *
+ * Pelaajan lisäämisen ikkunan hallintaluokka.
  */
 public class LisaaPelaajaGUIController {
 
-    //@FXML
-    //private TextField editNimi;
 
     @FXML
     private TextField hcp;

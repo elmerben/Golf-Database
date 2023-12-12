@@ -40,7 +40,7 @@ import java.util.ResourceBundle;
 /**
  * @author elias
  * @version 21.2.2023
- *
+ * Luokka, joka hallinnoi käyttöliittymää ja funktioita.
  */
 public class KlubbenGUIController implements Initializable {
 

@@ -12,7 +12,7 @@ import javafx.fxml.FXMLLoader;
 /**
  * @author elias
  * @version 2.2.2023
- *
+ * Main-luokka, joka alustaa projektin.
  */
 public class HarkkaMain extends Application {
     @Override

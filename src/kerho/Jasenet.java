@@ -12,7 +12,7 @@ import java.util.Arrays;
 /**
  * @author elias
  * @version 11.12.2023
- * Jasenet-luokka.
+ * Jasenet-luokka, joka hallinnoi jäsen-olioita sekä niiden käsittelyä.
  */
 public class Jasenet {
     

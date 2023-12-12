@@ -10,7 +10,6 @@ import kanta.HcpTarkistus;
  * Jäsen-luokka kuvaa kerhon jäsentä.
  * @author elias
  * @version 21.2.2023
- *
  */
 public class Jasen implements Cloneable {
 

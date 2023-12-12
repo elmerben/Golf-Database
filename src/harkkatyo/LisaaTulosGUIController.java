@@ -14,7 +14,7 @@ import kerho.Klubben;
 /**
  * @author elias
  * @version 11.12.2023
- *
+ * Tuloksen lisäämisen hallintaluokka.
  */
 public class LisaaTulosGUIController {
     

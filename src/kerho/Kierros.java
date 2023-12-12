@@ -9,7 +9,7 @@ import fi.jyu.mit.ohj2.Mjonot;
 /**
  * @author elias
  * @version 11.12.2023
- * Kierros-luokka.
+ * Kierros-luokka, jossa toteutetaan kierroksen luominen.
  */
 public class Kierros {
 

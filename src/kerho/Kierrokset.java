@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * @author elias
  * @version 11.12.2023
- * Kierrokset-luokka.
+ * Kierrokset-luokka, joka hallinnoi yksittäisiä kierroksia sekä niiden käsittelyä.
  */
 public class Kierrokset implements Iterable<Kierros> {
 
