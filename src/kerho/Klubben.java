@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author elias
  * @version 11.12.2023
- *
+ * Klubben-luokka, joka hallitsee jäsenet- ja kierrokset-luokkia.
  */
 public class Klubben {
 

@@ -3,7 +3,7 @@ package kerho;
 /**
  * @author elias
  * @version 11.12.2023
- *
+ * Virheiden käsittelyä varten tehty luokka.
  */
 public class SailoException extends Exception {
 

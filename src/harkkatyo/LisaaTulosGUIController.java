@@ -3,7 +3,6 @@ package harkkatyo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -35,10 +34,7 @@ public class LisaaTulosGUIController {
     
     private Klubben klubben;
     
-    private Button tallennaTulos;
-    
-    private Button peruutaTulos;    
-    
+
     /**
      * Asettaa annetun jäsenen.
      * @param jasen Asetettava jäsen.

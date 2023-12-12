@@ -31,13 +31,10 @@ import java.io.PrintStream;
 import java.net.URI;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import javafx.event.ActionEvent;
 
 
 /**
@@ -94,7 +91,7 @@ public class KlubbenGUIController implements Initializable {
     }
 
     @FXML
-    void handleEtsiKenttaLyhenne(ActionEvent event) {
+    void handleEtsiKenttaLyhenne() {
         etsiLyhenne();
     }
 
@@ -102,7 +99,7 @@ public class KlubbenGUIController implements Initializable {
     
     
     @FXML
-    void handleTulostaTulos(ActionEvent event) {
+    void handleTulostaTulos() {
         tulostaTiedot();
     }    
     
@@ -112,12 +109,12 @@ public class KlubbenGUIController implements Initializable {
     }
     
     @FXML
-    void handlePeruuta(ActionEvent event) {
+    void handlePeruuta() {
         peruuta();
     }
     
     @FXML
-    void handleLisaaKentta(ActionEvent event) {
+    void handleLisaaKentta() {
         LisaaKentta();
 
     }
@@ -136,7 +133,7 @@ public class KlubbenGUIController implements Initializable {
      * Poistaa valitun jäsenen tai kierroksen.
      */
     @FXML
-    void handlePoista(ActionEvent event) {
+    void handlePoista() {
         Jasen valittuJasen = chooserJasenet.getSelectedObject();
         Kierros valittuKierros = tableKierrokset.getObject();
 
@@ -148,7 +145,7 @@ public class KlubbenGUIController implements Initializable {
     }
     
     @FXML
-    void handleLisaaTulos(ActionEvent event) {
+    void handleLisaaTulos() {
         uusiTulos();
     }
     

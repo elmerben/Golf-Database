@@ -1,8 +1,19 @@
 package kanta;
 
+/**
+ * @author elias
+ * @version 12.12.2023
+ * HCP tarkistusluokka
+ */
 public class HcpTarkistus {
     
+    /**
+     * Sallitut numerot
+     */
     public static final String NUMEROT = "0123456789";
+    /**
+     * Sallitut desimaalit
+     */
     public static final String DESIMAALIT = "0123456789";
 
     
@@ -22,7 +33,6 @@ public class HcpTarkistus {
             return "Virheellinen syöte tasoituksessa.";
         }
         if (tasoitus.charAt(pituus - 2) != '.') return "Erotinmerkkinä voi olla vain piste.";
-//        if(tasoitus.charAt(2) != '.') return "Erotinmerkkinä voi olla vain piste.";
         double summa = Double.parseDouble(tasoitus);
         if (summa > 54.0) {
             return "Tasoitus liian suuri.";
